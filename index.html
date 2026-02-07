@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어 문장 퀴즈</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: 20px auto; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; margin: 5px; }
+        input { padding: 10px; width: 80%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        #answer { display: none; color: #28a745; font-weight: bold; font-size: 1.2em; margin-top: 20px; }
+        .info { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>🎯 영어 문장 퀴즈</h2>
+    <div id="setup">
+        <p class="info" id="total-info">파일을 불러오는 중...</p>
+        <p>학습할 장 번호를 입력하세요<br>(예: 1, 3, 5-8)</p>
+        <input type="text" id="page-input" placeholder="장 번호 입력">
+        <br>
+        <button onclick="startQuiz()">퀴즈 시작</button>
+    </div>
+
+    <div id="quiz" style="display:none;">
+        <div class="card">
+            <div class="info" id="progress"></div>
+            <p id="kor-text" style="font-size: 1.3em;"></p>
+            <div id="answer"></div>
+            <br>
+            <button id="next-btn" onclick="handleNext()">정답 확인</button>
+        </div>
+    </div>
+
+    <script>
+        let allData = [];
+        let quizList = [];
+        let currentIndex = 0;
+        let isShowingAnswer = false;
+
+        // 파일 읽기
+        fetch('English_Sentences.txt')
+            .then(response => response.text())
+            .then(text => {
+                const lines = text.split('\n');
+                lines.forEach(line => {
+                    let cleanLine = line.trim();
+                    if (!cleanLine) return;
+                    if (cleanLine.includes(']')) cleanLine = cleanLine.split(']').pop().trim();
+                    const parts = cleanLine.split(',');
+                    if (parts.length >= 3 && !isNaN(parts[0])) {
+                        allData.push({ num: parseInt(parts[0]), kor: parts[1], eng: parts[2] });
+                    }
+                });
+                document.getElementById('total-info').innerText = `✅ 총 ${allData.length}개 문장 로드 완료`;
+            });
+
+        function startQuiz() {
+            const input = document.getElementById('page-input').value;
+            const pages = new Set();
+            input.split(',').forEach(p => {
+                if (p.includes('-')) {
+                    const [start, end] = p.split('-').map(Number);
+                    for (let i = Math.min(start, end); i <= Math.max(start, end); i++) pages.add(i);
+                } else if (!isNaN(p.trim())) {
+                    pages.add(parseInt(p.trim()));
+                }
+            });
+
+            quizList = allData.filter(d => {
+                const pNum = Math.ceil(d.num / 30);
+                return pages.has(pNum);
+            });
+
+            if (quizList.length === 0) return alert('해당하는 장이 없습니다!');
+            quizList.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = quizList[currentIndex];
+            document.getElementById('progress').innerText = `진행: ${currentIndex + 1}/${quizList.length}`;
+            document.getElementById('kor-text').innerText = `👉 ${q.kor}`;
+            document.getElementById('answer').innerText = `📖 ${q.eng}`;
+            document.getElementById('answer').style.display = 'none';
+            document.getElementById('next-btn').innerText = '정답 확인';
+            isShowingAnswer = false;
+        }
+
+        function handleNext() {
+            if (!isShowingAnswer) {
+                document.getElementById('answer').style.display = 'block';
+                document.getElementById('next-btn').innerText = '다음 문제';
+                isShowingAnswer = true;
+            } else {
+                currentIndex++;
+                if (currentIndex < quizList.length) {
+                    showQuestion();
+                } else {
+                    alert('🎉 모든 문제를 완료했습니다!');
+                    location.reload();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
