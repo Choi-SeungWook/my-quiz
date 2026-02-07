@@ -1,0 +1,600 @@
+001,기분이 안 좋아 보여.,You look down.
+002,기분이 우울해.,I feel blue.
+003,무슨 일 있어?,What's eating you?
+004,왜 그렇게 시무룩해?,Why the long face?
+005,내키지 않아.,I'm not in the mood.
+006,기분 전환 하고 싶어.,I need a change of scenery.
+007,시원섭섭하네.,It's a bitter-sweet feeling.
+008,시간이 너무 빨리 가.,Time flies.
+009,아쉽다!,What a shame!
+010,정말 아깝다!,It's such a waste.
+011,아까워라!,It was so close!
+012,재수도 되게 없네.,Just my luck.
+013,마음이 편치 않아.,I feel uneasy.
+014,자존심 상해.,It hurts my ego.
+015,걔는 오늘 몸이 좀 안 좋아.,He's feeling under the weather today.
+016,화난 거 아니야.,I'm not cross.
+017,네가 내 아픈 데를 건드렸어.,You touched a sore spot for me.
+018,지금 나 놀리는 거지?,You are pulling my leg!
+019,목이 메어.,I got all choked up.
+020,불쌍해라!,What a pity!
+021,마음이 너무 아파.,It breaks my heart.
+022,눈물을 삼키려고 했어.,I tried to fight back the tears.
+023,난 지금 절망적인 상태야.,I'm in a no-win situation.
+024,펑펑 울었어.,I cried my eyes out.
+025,끝내주는데!,It's awesome!
+026,너무 기뻐!,I'm overjoyed!
+027,기분이 뿌듯해.,I feel good about myself.
+028,걔 기분이 아주 좋아.,He's in high spirits.
+029,콧노래가 절로 나와.,I feel like humming.
+030,걔 입이 귀에 걸렸어.,He's grinning from ear to ear.
+031,머릿속이 하얘.,I've gone blank.
+032,너무 긴장 돼.,I have butterflies in my stomach.
+033,조마조마해 죽겠어.,The suspense is killing me.
+034,너무 다행이야.,I'm so relieved.
+035,속이 다 시원하네.,Good riddance.
+036,한시름 덜었네.,That's a load off my mind.
+037,정말 쪽팔렸어.,I felt so embarrassed.
+038,창피해서 혼났어.,I almost died of humiliation.
+039,체면 다 구겼네.,I've lost face.
+040,어이없네.,I am dumb founded.
+041,썰렁하네.,This is awkward.
+042,아리송하네.,This is puzzling.
+043,그럴 리가!,No way!
+044,말도 안 돼.,I don't believe this.
+045,정말이야?,Are you serious?
+046,누가 알았겠어?,Who would have known?
+047,뭐야 이거?,What the heck?
+048,그걸 듣고 정말 놀랐어.,It took me completely by surprise.
+049,좀 충격을 받았어.,I'm a little shaken.
+050,어떻게 이런 일이?,How can this be?
+051,할 말을 잃었어.,I'm lost for words.
+052,완전 뿅 갔어.,It just blew my mind.
+053,이럴 수는 없어!,This can't be happening!
+054,걔는 그것 때문에 많이 힘들어했어.,She took it very hard.
+055,소름 끼쳐.,They give me the creeps.
+056,무서워서 죽을 뻔했어.,I was scared to death.
+057,기절할 뻔했어.,I almost passed out.
+058,식은땀이 났어.,I broke out in a cold sweat.
+059,난 공포증이 있어.,I have a phobia.
+060,도저히 눈 뜨고 못 보겠어.,I can't bear to watch.
+061,지루해 죽겠다.,I'm bored to death.
+062,지긋지긋해.,I'm sick and tired of it.
+063,더 이상 못 참겠어.,I can't take it any more.
+064,또 뭐야?,What now?
+065,제네 또 싸운다.,They are at it again.
+066,그만 좀 해라!,Will you knock it off?
+067,만사가 귀찮아.,Everything is such a hassle.
+068,오늘 만사가 안 풀리네.,I'm having a bad hair day.
+069,미쳐버리겠네.,It's driving me up the wall.
+070,그게 신경이 쓰여.,It bugs me.
+071,미치겠네!,For crying out loud!
+072,그걸 일일이 다 말해줘야 돼?,Do I have to spell it out for you?
+073,넌 빠져!,You stay out of this!
+074,허튼 소리 하지 마.,Don't give me that.
+075,가까이 오지 마.,Stay away from me.
+076,그러기만 해봐라!,Don't you dare!
+077,자꾸 들먹이지 마.,Don't rub it in.
+078,농담 아니야.,I mean it.
+079,엄살 좀 부리지 마.,Don't be a crybaby.
+080,호들갑 좀 떨지 마.,Stop fussing.
+081,헛소리 좀 하지 마.,Don't give me that baloney.
+082,시치미 떼지 마.,Don't play dumb with me.
+083,말이야 쉽지.,Talk is cheap.
+084,거봐!,I told you so!
+085,보채지 좀 마.,Stop whining.
+086,재촉하지 좀 마.,Don't rush me.
+087,그 애를 괴롭히지 마.,Stop picking on her.
+088,넌 상관하지 마.,It's none of your business.
+089,너랑 무슨 상관인데?,What's it to you?
+090,네가 뭔데 그래?,Who do you think you are?
+091,이기적으로 굴지 마.,Don't be selfish.
+092,너 정신이 나갔구나.,You're out of your mind.
+093,또 무슨 일을 저지른 거야?,What have you done now?
+094,너 딱 걸렸어.,You are so busted.
+095,걔한테 너무 심하게 굴지 마.,Don't be too hard on him.
+096,그럴 것까지는 없잖아.,That was uncalled for.
+097,샘통이다.,You deserve it.
+098,이거 너무하네!,This is too much!
+099,너 정말 못됐어.,You are so mean.
+100,그 여자가 널 갖고 노는 거야.,She's playing you.
+101,분위기 깨지 마.,Don't spoil the fun.
+102,그 앤 일부러 그랬어.,He did it on purpose.
+103,말조심해.,Watch your mouth!
+104,말 가려서 해.,Mind your language.
+105,그 말 취소해.,You take it back.
+106,걔는 입이 싸.,He has a big mouth.
+107,넌 너무 솔직해서 탈이야.,You're too outspoken.
+108,입에 발린 소리 그만해.,Stop giving me lip service.
+109,끼어들지 마.,Don't interrupt.
+110,말대꾸하지 마.,Don't talk back to me.
+111,말 돌리지 마.,Don't change the subject.
+112,얼버무리고 넘어가려 하지 마.,Don't try to gloss over this.
+113,그런 얘기는 꺼내지도 마.,Don't even bring that up.
+114,걔 횡설수설하고 있어.,He's talking gibberish.
+115,넌 염치도 없구나.,You have no shame.
+116,도가 너무 지나쳤어.,That was out of line.
+117,사람들 보는데 이게 뭐야.,You are making a scene.
+118,왜 이렇게 버릇없게 구니?,Where are your manners?
+119,정말 꼴불견이다.,What an eyesore.
+120,게으름 피우지 마.,Don't slack off.
+121,진짜 화난다.,I'm so exasperated.
+122,화를 못 참았어.,I lost my temper.
+123,내가 발끈했어.,I blew a fuse.
+124,피가 거꾸로 솟는다!,It makes my blood boil!
+125,진정해!,Calm down!
+126,쟤 삐쳤어.,He's sulking.
+127,어떻게 감히 내게!,How dare you!
+128,어떻게 이럴 수가 있어?,How could you?
+129,열 받네.,That burns me up.
+130,걔 때문에 미치겠어.,She's driving me crazy.
+131,쟤 언제 터질지 몰라.,She's a walking time-bomb.
+132,걔가 성질을 부렸어.,He threw a tantrum.
+133,불공평해요.,It's not fair.
+134,잔소리 좀 그만해요.,Stop lecturing me.
+135,또야!,Not again!
+136,또 그런다.,There you go again.
+137,나한테 화풀이하지 마.,Don't take it out on me.
+138,그분은 심기가 불편해.,He's in a foul mood.
+139,약 올리지 마.,Stop winding me up.
+140,존을 흉보지 마.,Don't bad-mouth John.
+141,나 놀리는 거니?,Are you mocking me?
+142,걔한테 욕하지 마.,Stop calling him names.
+143,이름값 좀 해라.,Live up to your name.
+144,걔는 아무짝에도 쓸모가 없어.,He's a good-for-nothing.
+145,너 발맞이야.,You put me off.
+146,너에게 똑같이 갚아 주마.,I'll get even with you.
+147,그는 너한테 원한을 품고 있어.,He has a grudge against you.
+148,쟤 손 좀 봐줘야겠어.,I'm going to teach him a lesson.
+149,걔가 너한테 복수하는 거야.,She's getting back at you.
+150,풀어야 할 원한이 있어.,I have a score to settle.
+151,사돈 남 말 하네!,Look who's talking!
+152,그래서 뭐?,What of it?
+153,그게 무슨 상관인데?,What's that got to do with it?
+154,날 뭘로 보는 거야?,What do you take me for?
+155,무슨 근거로?,On what grounds?
+156,배 째!,So sue me!
+157,오해하지 마.,Don't get me wrong.
+158,바른대로 말해.,You owe me an explanation.
+159,일부러 그런 게 아니야.,I didn't do it on purpose.
+160,그런 말 하려던 게 아니었어.,I didn't mean to say that.
+161,캐물으려던 건 아니었어.,I didn't mean to pry.
+162,어쩔 수가 없었어.,I couldn't help it.
+163,꿈에도 몰랐어!,I had no idea!
+164,나보고 어쩌라고?,What was I supposed to do?
+165,어쩌다 보니.,One thing led to another.
+166,충동적으로 그랬어.,I acted on impulse.
+167,변명하지 마.,Don't make excuses.
+168,궁색한 변명 하고 있네.,That's a lame excuse.
+169,거기에 낚였어.,I fell for it.
+170,바보 같은 짓을 했어.,I made a fool of myself.
+171,이럴 줄은 몰랐어.,I didn't see that coming.
+172,내가 오버했어.,I got carried away.
+173,그걸 당연하다고 여겼어.,I took it for granted.
+174,내 생각이 짧았어.,I wasn't thinking straight.
+175,너한테 사과하고 싶어.,I owe you an apology.
+176,너한테 쏘아붙여서 미안해.,Sorry I snapped at you.
+177,기분 상하게 했다면 미안해.,Sorry if I offended you.
+178,대놓고 말해서 미안해.,Pardon my bluntness.
+179,기분 나쁜 거 아니지?,No hard feelings, I hope.
+180,우리 화해합시다.,Let's bury the hatchet.
+181,날짜를 정하자.,Let's set a date.
+182,언제 다 같이 보자.,Let's all get together sometime.
+183,언제든지 전화 주세요.,Give me a call anytime.
+184,저녁 먹으면서 얘기하자.,Let's talk over dinner.
+185,이번 주말에 만나자.,Let's meet up this weekend.
+186,내일 시간 있어?,Are you free tomorrow?
+187,왜 늦은 거야?,What kept you?
+188,겨우 시간 맞춰 왔네!,Just in time!
+189,시간 정확히 맞춰 왔네!,You are right on time!
+190,지금쯤 와야 하는데.,He should be here by now.
+191,오고 있대.,She's on her way.
+192,호랑이도 제 말 하면 온다더니!,Talk of the devil!
+193,어서 들어와.,Come on in.
+194,편하게 계세요.,Make yourself at home.
+195,얼굴이 낯이 익어요.,Your face seems familiar.
+196,강 교수님이시죠?,You must be Professor Kang.
+197,성함을 미처 못 들었습니다.,I didn't catch your name.
+198,명성은 익히 들었습니다.,Your reputation precedes you.
+199,정말 오랜만이다!,Long time no see!
+200,너 하나도 안 변했다.,You haven't changed a bit.
+201,톰과 우연히 마주쳤어.,I ran into Tom.
+202,세상 참 좁구나!,It's a small world!
+203,여긴 어쩐 일이야?,What brings you here?
+204,여기서 널 만나다니 너무 반갑다.,Fancy meeting you here.
+205,어떻게 지내?,How's everything?
+206,건강은 좀 어때?,How's your health?
+207,부모님은 안녕하시니?,How are your parents?
+208,제인에게 안부 전해줘.,Give Jane my best.
+209,지낼 만하니?,How are you holding up?
+210,요즘 뭐 하고 지내?,What are you up to nowadays?
+211,술이 당기네.,I feel like a drink.
+212,한잔하러 가자.,Let's go for a drink.
+213,내가 쏠게.,The drinks are on me.
+214,나 여기 단골이야.,I'm a regular here.
+215,다음 잔은 내가 살게.,The next round's on me.
+216,계산은 내가 할게.,I'll pick up the tab.
+217,원샷!,Bottoms up!
+218,한 잔 따라 드리겠습니다.,Let me pour you a drink.
+219,난 맥주 체질이야.,Beer agrees with me.
+220,난 술이 약해.,I'm a poor drinker.
+221,걔 술고래야.,He drinks like a fish.
+222,안주는 네가 골라.,You pick the side dishes.
+223,알딸딸해.,I feel tipsy.
+224,술 좀 깨야겠어.,I need to sober up.
+225,쟤 폭음했어.,He's been binge drinking.
+226,필름이 끊겼어.,I blacked out.
+227,숙취가 있어.,I have a hangover.
+228,나 술 끊었어.,I'm on the wagon.
+229,나 골초야.,I'm a heavy smoker.
+230,나 담배 끊었어.,I quit smoking.
+231,금단현상을 겪고 있어.,I'm going through withdrawal.
+232,담배를 줄여야겠어.,I have to cut down on smoking.
+233,난 하루에 반 갑을 피워.,I smoke half a pack a day.
+234,전자담배 피우자.,Let's vape.
+235,이제 그만 가봐야 해.,I must be going now.
+236,먼저 일어나도 될까요?,May I be excused?
+237,제가 출구까지 배웅해 드리죠.,I'll walk you out.
+238,제가 알아서 나갈게요.,I'll let myself out.
+239,시간 내 주셔서 고마워요.,Thank you for your time.
+240,연락하고 지내자.,Let's keep in touch.
+241,쟤 성깔 있어.,He has a temper.
+242,걔는 유머감각이 있어.,He has a sense of humor.
+243,난 긍정적인 사람이야.,I'm an optimistic person.
+244,그는 냉정해.,He's a cold-hearted man.
+245,넌 정말 독특해.,You are one of akind.
+246,그는 계산적인 사람이야.,He's a calculating person.
+247,걔는 성격이 원만해.,She's an easy-going person.
+248,걔는 낯을 가려.,He's shy of strangers.
+249,걔는 성격이 느긋해.,He has a laid-back personality.
+250,그 애는 내성적이야.,She's withdrawn.
+251,그는 사람들과 잘 어울려.,He's gregarious.
+252,그는 호감형이야.,He's a likable guy.
+253,걔는 뒤끝이 없어.,He doesn't hold a grudge.
+254,걔는 너무 거들먹거려.,He's so stuck-up.
+255,걔는 융통성이 없어.,He's inflexible.
+256,그녀는 귀가 얇아.,She's gullible.
+257,걔는 4차원이야.,She lives in her own world.
+258,걔는 우유부단해.,He's wishy-washy.
+259,그녀는 내 타입이야.,She's my type.
+260,내가 저 여자 찍었어.,I have my eyes on her.
+261,저 남자가 나한테 집적거렸어.,He hit on me.
+262,그 여자한테 작업 걸지 마.,Stop flirting with her.
+263,저 남자가 너한테 수작 걸었어.,He made a pass at you.
+264,튕기지 좀 마.,Don't play hard to get.
+265,걔한테 홀딱 반했어.,I have a crush on her.
+266,첫눈에 반했지.,It was love at first sight.
+267,내 이상형을 만났어.,I met my Mr. Right.
+268,우린 죽이 정말 잘 맞았어.,We really hit it off.
+269,우린 천생연분이야.,We're a match made in heaven.
+270,걔 어디가 좋아?,What do you see in him?
+271,나랑 사귈래?,Do you want to go out with me?
+272,누구 만나는 사람 있어요?,Are you seeing anyone?
+273,사귀는 사람이 있어요.,I'm involved with someone.
+274,나 누구 소개 좀 시켜줘.,Fix me up with someone.
+275,나 소개팅 있어.,I have a blind date.
+276,간 좀 그만 봐!,Stop sizing her up!
+277,쟤네 사귀잖아.,They're an item.
+278,우린 잘 사귀고 있어.,We're going steady.
+279,점수 좀 땄지.,I won some brownie points.
+280,쟤네 닭살 커플이야.,They're a lovey-dovey couple.
+281,그 애는 네 수준 밖이야.,She's out of your league.
+282,그는 좋은 신랑감이네.,He's husband material.
+283,그 애가 날 바람맞혔어.,She stood me up.
+284,제인이 양다리를 걸치고 있어.,Jane's two-timing them.
+285,그냥 가벼운 불장난이었어.,It was just a fling.
+286,걔가 바람을 피웠어.,He cheated on me.
+287,쟤들 삼각관계야.,They're in a love triangle.
+288,나 권태기야.,I have the seven-year itch.
+289,이제 너랑은 끝이야.,I'm through with you.
+290,나 걔랑 깨졌어.,I broke up with her.
+291,걔가 로널드를 찼어.,She dumped Ronald.
+292,우린 사랑이 식었어.,Our love has died.
+293,우린 여기가 끝인가 보다.,I guess this is it.
+294,난 그 애를 잊었어.,I'm over her.
+295,프러포즈를 했어.,I popped the question.
+296,우리 약혼했어.,We got engaged.
+297,우리 결혼했어.,We tied the knot.
+298,톰이 내 들러리야.,Tom's my best man.
+299,이게 우리 청첩장이야.,This is our wedding invitation.
+300,걔는 연하랑 결혼했어.,She robbed the cradle.
+301,지금 시간 괜찮아?,Is now a good time?
+302,우리 얘기 좀 해.,We need to talk.
+303,직접 만나서 얘기하자.,Let's talk face to face.
+304,너에게 해주고 싶었던 말이 있어.,I've been meaning to tell you.
+305,자리 좀 비켜 줄래요?,Could you give us some privacy?
+306,둘이서만!,In private.
+307,소식 못 들었어?,Haven't you heard?
+308,그냥 알고 있으라고.,Just to let you know.
+309,너한테 귀띔해 줄게.,I'll give you a heads-up.
+310,소문으로 들었어.,I heard it through the grapevine.
+311,넌 알 자격이 있어.,You deserve to know.
+312,그게 유행하고 있어.,It's catching on.
+313,뭔가 수상해.,Something's fishy.
+314,못 믿겠어.,I don't buy it.
+315,무슨 꿍꿍이야?,What's up your sleeve?
+316,좀 이상하게 느껴져.,It strikes me as odd.
+317,농담이지?,You can't be serious!
+318,걘 참 의심이 많아.,He's so skeptical.
+319,사탕발림하지 마.,Don't sugar coat it.
+320,솔직하게 말해줄게.,I'll level with you.
+321,솔직하게 말할게.,I'll be frank with you.
+322,우리 솔직해지자.,Let's come clean.
+323,초쳐서 미안해.,Sorry to rain on your parade.
+324,알면서 모른 척하지 마.,Don't turn a blind eye!
+325,날 믿어도 돼.,You can count on me.
+326,약속해.,I give you my word.
+327,네 말을 믿을게.,I'll take your word for it.
+328,다른 뜻은 없어.,There are no strings attached.
+329,지어내는 말이 아니야.,I'm not making it up.
+330,걔가 날 배신했어.,He double-crossed me.
+331,내 얘기 좀 들어봐.,Hear me out.
+332,듣고 있으니 말해봐.,I'm all ears.
+333,뭐라고?,Come again?
+334,다시 한 번 말씀해 주실래요?,I beg your pardon?
+335,너 엿들었어?,Did you eavesdrop?
+336,너 귀가 밝구나.,You have good hearing.
+337,식은 죽 먹기야.,It's a piece of cake.
+338,금방 끝나.,I'll be brief.
+339,다시 설명할게.,Let me rephrase that.
+340,어떻게 말하면 좋을까?,How should I put it?
+341,좀 더 자세히 말해줄게.,I'll elaborate.
+342,애둘 말한 게 이게 다야.,That's pretty much it.
+343,알았다!,I get it!
+344,무슨 말인지 알겠어.,Point taken.
+345,이제야 확실히 알겠어.,It's crystal clear now.
+346,그리 어렵지 않아.,It's not rocket science.
+347,네가 이해해 주리라 믿어.,I'm sure you'll understand.
+348,걔가 무슨 말인지 알아들은 것 같아.,I think he got the message.
+349,무슨 말인지 이해가 안 돼.,I don't follow you.
+350,전혀 짐작이 안 가.,I haven't got a clue.
+351,도대체 너를 이해를 못하겠어.,I don't get you.
+352,갈피를 못 잡겠어.,I can't make heads or tails of it.
+353,그래서 그랬구나!,So that's how it was!
+354,내가 네 입장은 아니잖아.,I'm not in your shoes.
+355,직감이야.,It's a hunch.
+356,무슨 뜻인지 알겠어.,I got the picture.
+357,내 마음을 읽었네.,You read my mind.
+358,감 잡았어!,I got the hang of it.
+359,눈치챘어.,I can take a hint.
+360,요점만 말해줘.,Just give me the highlights.
+361,그거 좋은 생각인데.,Sounds like a plan.
+362,그게 말 되네.,That makes sense.
+363,그게 일리 있네.,You have a point there.
+364,어느 정도는.,In a way.
+365,그렇다고 볼 수 있지.,You could say that.
+366,나도 동의해.,I'll second that.
+367,내 말이 그 말이라니까!,That's what I mean.
+368,두말하면 잔소리지.,You can say that again.
+369,무슨 말인지 알아.,I know what you mean.
+370,나도 그래.,That makes two of us.
+371,바로 그거라니까!,That's what I'm talking about!
+372,그 점은 동의할 수 없어.,I'm not with you on that.
+373,나도 할래.,I'm game.
+374,난 빠질게.,Count me out.
+375,나도 따라가도 돼?,Can I tag along?
+376,각오하고 있어?,Are you up to it?
+377,그건 내 사정이 안 돼.,That rules me out.
+378,내가 끼어들 일이 아닌 거 같아.,I know it's not my place.
+379,난 됐어.,I'm good.
+380,안 하는게 나을 거 같아.,I'd rather not.
+381,유감이지만 안 되겠어.,I'm afraid not.
+382,거절했어.,I turned it down.
+383,다음에 하자.,I'll take a rain check.
+384,좀 더 생각해 볼게.,Let me sleep on it.
+385,소용없어.,It's no use.
+386,네 좋을 대로 해.,Suit yourself.
+387,그건 별차이 없어.,It makes no difference.
+388,네 마음대로 해.,Have it your way.
+389,운명을 받아들여.,Accept your fate.
+390,운명인가 봐.,Maybe it was meant to be.
+391,그냥 궁금해서.,Just out of curiosity.
+392,생각해 보니까.,Come to think of it...
+393,생각했던 대로군.,Just as I thought.
+394,갑자기 생각났어.,It just sprang to mind.
+395,입 안에서 맴돌 뿐이야.,It's on the tip of my tongue.
+396,충분히 생각을 안 했어.,I didn't think it through.
+397,뻔하네.,It's obvious.
+398,그건 뻔해.,It's clear-cut.
+399,다행이네.,It's good to know.
+400,모르는 게 약이야.,Ignorance is bliss.
+401,내가 어떻게 알았겠어?,How was I supposed to know?
+402,전혀 모르는 일이야.,I had nothing to do with it.
+403,깜빡할 뻔했네.,I almost forgot.
+404,너 기억력이 좋구나.,You have a good memory.
+405,그러고 보니 생각났다.,That reminds me.
+406,기억이 안 나.,I don't recall.
+407,어디서 봤는지 기억이 안 나네요.,I can't place you.
+408,난 건망증이 심해.,I'm so forgetful.
+409,잘 되고 있어?,How's it coming along?
+410,그 정도면 됐어.,That's close enough.
+411,의심의 여지가 없어.,No doubt about it.
+412,보아하니 그러네.,By the looks of it.
+413,또 다른 의견을 듣고 싶어.,I'd like a second opinion.
+414,뻔한 것 아냐!,You do the math!
+415,그럴 줄 알았어.,I figured as much.
+416,내가 뭐랬니!,What did I tell you?
+417,불길한 예감이 들어.,I have a bad feeling about this.
+418,내 예상이 빗나갔어.,I was way off the mark.
+419,내기할래?,You wanna bet?
+420,단정적으로.,Give or take.
+421,티나니?,Does it show?
+422,나만 그런가?,Is it just me?
+423,생각해 둔 거 있어?,What do you have in mind?
+424,뭐가 특이한 점이 있어?,Anything out of the ordinary?
+425,이 상황을 어떻게 보니?,What do you make of it?
+426,걔가 어떻게 받아들였어?,How did she take it?
+427,요점을 말해.,Get to the point.
+428,그게 핵심이 아니라니까!,That's not the point!
+429,이걸로 퉁치자.,Let's call it even.
+430,싫으면 관둬.,Take it or leave it.
+431,나한테는 뭐가 떨어지는데?,What's in it for me?
+432,무슨 일을 하려는 거야?,Where are you going with this?
+433,어떻게 됐어?,How did it go?
+434,걔는 해내고야 말았어.,He pulled it off.
+435,흐지부지됐어.,It fizzled out.
+436,매듭을 지어야겠어.,I need closure.
+437,어서 끝내 버리자.,Let's get it over with.
+438,난 정정당당하게 이겼어.,I won fair and square.
+439,결심했어.,I've made up my mind.
+440,마음의 준비가 안 됐어.,I'm not up to it.
+441,마음이 흔들리고 있어.,I'm having second thoughts.
+442,의견을 갖지 마.,Stop second-guessing yourself.
+443,결국 어떻게 될까?,What's it gonna be?
+444,내 결정은 변함이 없어.,I stand by my decision.
+445,그건 너한테 달렸어.,It's up to you.
+446,내가 찜했어.,I've got dibs.
+447,선택의 여지가 없군.,You leave me no choice.
+448,그게 우리 모두를 위한 최선이야.,It's the best for all of us.
+449,그건 네가 알아서 해.,I'll leave it to you.
+450,선택의 폭이 좁아.,There aren't many options.
+451,괜찮은 거야?,Is everything all right?
+452,무슨 일이야?,What's going on?
+453,너 왜 이래?,What's the matter with you?
+454,무슨 걱정 있어?,What's bugging you?
+455,걔 왜 저래?,What's gotten into him?
+456,무슨 문제라도 있어?,What seems to be the problem?
+457,일이 좀 생겼어.,Something came up.
+458,나 상황이 좀 난처해.,I'm in a tight spot.
+459,상황이 험악해졌어.,Things got ugly.
+460,상황이 겉잡을 수 없게 됐어.,It got out of hand.
+461,비밀이 탄로 났어.,The cat's out of the bag.
+462,누가 소문을 낸 거야?,Who spilled the beans?
+463,급한 일이야.,It's urgent.
+464,시간문제야.,It's a matter of time.
+465,별거 아니야.,It's not a big deal.
+466,갈수록 태산이야.,Out of the frying pan, into the fire.
+467,큰일 날 뻔했네.,That was close.
+468,난 더 심한 것도 봤어.,I've seen worse.
+469,시간이 부족했어.,I ran out of time.
+470,뭐가 잘못된 거야?,What went wrong?
+471,못하는 이유가 뭔데?,What's standing in your way?
+472,이것의 원인을 파헤쳐 보자.,Let's get to the bottom of this.
+473,누가 이걸 시켰어?,Who put you up to this?
+474,돈이 문제가 아니야.,Money is not the issue.
+475,내가 처리할게.,I'll handle it.
+476,내가 알아서 할게.,I've got it covered.
+477,잘 되고 있어.,It's in good hands.
+478,우리 이겨낼 거야.,We'll get through this.
+479,이미 처리했어.,It's been taken care of.
+480,싹을 잘라 버리자.,Let's nip it in the bud.
+481,한번 해볼게.,I'll give it a go.
+482,위험을 감수해야지.,I'll take my chances.
+483,밑져야 본전이지.,I've got nothing to lose.
+484,어떻게 됐든 간에.,One way or the other.
+485,이건 무의미해.,This is pointless.
+486,차마 그럴 수가 없었어.,I couldn't bring myself to do it.
+487,너를 응원하고 있어.,I'm rooting for you.
+488,잘했어!,Way to go!
+489,난 네 편이야.,I'm on your side.
+490,최선을 다해봐.,Give it your best shot.
+491,이 부분에 대해 넌 날 믿어도 돼.,I'm behind you on this.
+492,마음먹기에 달렸어.,It's mind over matter.
+493,부탁 좀 할게.,I need a favor.
+494,좀 거들 수 있어?,Can you give me a hand?
+495,신경 쓰지 마.,Don't bother.
+496,잠깐만요.,Hang on a minute.
+497,나한테 살살 좀 해줘.,Go easy on me.
+498,예외로 좀 해주면 안 될까?,Can you make an exception?
+499,그럴 만한 가치가 없어.,It's not worth it.
+500,인정하자.,Let's face it.
+501,걔 좀 단념시켜줘.,Talk her out of it.
+502,제 정신 차리게 설득 좀 해봐.,Talk some sense into her.
+503,그래도 되겠지?,I hope you don't mind.
+504,담배 피워도 될까요?,Do you mind if I smoke?
+505,전혀.,Not at all.
+506,그러세요.,Be my guest.
+507,나도 그럴 수 있으면 좋겠네.,I wish I could.
+508,이번 한 번만이야.,Just this once.
+509,너 나한테 빚진 거야.,You owe me.
+510,조건이 하나 있어.,On one condition.
+511,살살 해.,Easy does it.
+512,발밑을 조심해.,Watch your step.
+513,앞 좀 보고 다녀.,Watch where you're going!
+514,허점이 있어.,There's a loophole.
+515,그런데 주의할 점이 있어.,But there's a catch.
+516,성급하게 뛰어들지 마.,Don't rush into it.
+517,침착하게 대처해.,Play it cool.
+518,진정해.,Take it easy.
+519,기운 내.,Pull yourself together.
+520,천천히 해.,Take your time.
+521,흥분 좀 가라앉혀.,Chill out.
+522,조바심 좀 내지 마.,Keep your pants on.
+523,그건 시도해 볼만해.,It's worth a shot.
+524,이건 일생의 기회야.,It's a once-in-a-lifetime opportunity.
+525,안 하면 후회할 텐데.,You don't know what you're missing.
+526,쫄지 마.,Don't be a chicken.
+527,나라면 안 하겠어.,I wouldn't if I were you.
+528,어려워 봤자지.,How hard can it be?
+529,중요한 것부터 하자.,First things first.
+530,안 그러는 게 좋을걸.,It's best you don't.
+531,이건 헛수고야.,It's a wild goose chase.
+532,후회할 거야.,You'll regret it.
+533,때가 오면 다 알게 돼 있어.,All in good time.
+534,참지 않아도 돼.,Don't hold back.
+535,꿈 깨!,In your dreams.
+536,네 분수를 알아야지.,You should know your place.
+537,내 말을 명심해.,Mark my words.
+538,우쭐대지 마.,Don't flatter yourself.
+539,그러다 큰코다친다.,You'll pay dearly.
+540,이제 뒤로가는 거 없어!,There's no turning back now!
+541,행운을 빌게!,I wish you luck.
+542,용기를 내!,Keep your spirits up!
+543,마음껏 해봐.,Knock yourself out.
+544,설레길 빌게.,I'll keep my fingers crossed.
+545,마음만 먹으면 뭐든지 할 수 있어.,You can do anything you set your mind to.
+546,전화위복이었어.,It was a blessing in disguise.
+547,기운 내.,Keep your chin up.
+548,참 안됐다.,I'm so sorry.
+549,이게 어디야!,It's better than nothing.
+550,너무 자책하지 마.,Don't be so hard on yourself.
+551,마음 편히 먹어.,Put your mind at ease.
+552,시간이 약이야.,Time heals all wounds.
+553,그 기분 알아.,I know how you feel.
+554,낙담하지 마.,Don't be discouraged.
+555,모든 게 잘 될 거야.,Everything will be all right.
+556,너도 어쩔 수 없었잖아.,There was nothing you could do.
+557,누구에게나 일어날 수 있는 일이야.,It could happen to anyone.
+558,삼가 고인의 명복을 빕니다.,My deepest condolences.
+559,말만 해.,You name it.
+560,한번 알아볼게.,I'll see what I can do.
+561,나도 십시일반 할게.,I'll pitch in.
+562,도움이 될 거야.,It will come in handy.
+563,궁금하면 부탁하던지.,Say the magic word.
+564,우리 상부상조하자.,If you scratch my back, I'll scratch yours.
+565,정말 감동적이야.,It's very touching.
+566,가슴이 벅차다.,I'm overwhelmed.
+567,신세 갚을게.,I'll make it up to you.
+568,정말 다행이다!,What a relief!
+569,위로해 줘서 고마워.,Thank you for your comforting words.
+570,내 감사의 표시야.,It's a token of my appreciation.
+571,잘됐네!,Good for you!
+572,결정 잘했어.,Good call.
+573,그게 훨씬 낫네.,That's more like it!
+574,과찬이세요.,I'm flattered.
+575,시작이 좋은데.,We're off to a good start.
+576,너 정말 대단하다.,I've got to hand it to you.
+577,빨리 했으면 좋겠어!,I can't wait!
+578,기대 이상이었어.,It was beyond my expectations.
+579,기대에 못 미치는군.,It's not up to scratch.
+580,완전 실망이야.,It's a total letdown.
+581,내 기대가 너무 컸어.,My expectations were too high.
+582,너무 기대하지 마.,Don't bet on it.
+583,신경 쓰지 마.,Never mind.
+584,전혀 상관 안 해.,I couldn't care less.
+585,내가 눈여겨볼게.,I'll keep an eye on her.
+586,구미가 당기는데.,I'm intrigued.
+587,어디 보자.,Let's have a look.
+588,나 좀 봐줘요.,Cut me some slack.
+589,준비 완료!,We're all set!
+590,빈틈없는 계획이야.,It's a foolproof plan.
+591,만약을 위해 대비하자.,Let's prepare for a rainy day.
+592,그냥 임기응변으로 해야겠어.,I'll just have to wing it.
+593,나중에 후회하는 것보다 낫잖아.,Better safe than sorry.
+594,위기에 대비해 두자.,Let's batten down the hatches.
+595,명심할게.,I'll keep that in mind.
+596,장이 나면 할게.,I'll get around to it.
+597,난 새 사람이 됐어.,I turned over a new leaf.
+598,이미 지난 일이야.,It's water under the bridge.
+599,지나간 일은 잊어버리자.,Let bygones be bygones.
+600,이 또한 지나갈 거야.,This too shall pass.
