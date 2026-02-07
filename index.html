@@ -2,10 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>영어 문장 퀴즈</title>
     <style>
-        /* 폰에서 보기 편하게 전체적인 크기를 키웠습니다 */
         body { 
             font-family: -apple-system, sans-serif; 
             text-align: center; 
@@ -15,9 +14,27 @@
             height: 100vh; 
             display: flex; 
             flex-direction: column;
-            user-select: none; /* 텍스트 선택 방지 */
+            user-select: none;
+            /* 터치 시 깜빡임 방지 핵심 코드 */
+            -webkit-tap-highlight-color: transparent;
         }
-        #setup { padding: 50px 20px; }
+        
+        /* 실시간 타이머 스타일 */
+        #timer-display {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 1000;
+        }
+
+        #setup { padding: 80px 20px; }
         .quiz-container { 
             flex: 1; 
             display: flex; 
@@ -25,41 +42,45 @@
             justify-content: center; 
             align-items: center; 
             padding: 20px;
-            cursor: pointer; /* 클릭 가능한 느낌 주기 */
+            cursor: pointer;
         }
         .card { 
             background: white; 
             width: 90%; 
             max-width: 500px; 
             padding: 40px 20px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
         }
-        h2 { color: #333; }
-        .kor-text { font-size: 1.5rem; font-weight: bold; color: #007bff; margin-bottom: 20px; line-height: 1.4; }
+        .kor-text { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 25px; line-height: 1.4; }
         .eng-text { font-size: 1.4rem; color: #28a745; font-weight: 600; min-height: 1.5em; }
-        .hint-msg { color: #aaa; font-size: 0.9rem; margin-top: 30px; }
-        .info { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
-        input { padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; }
-        button.start-btn { padding: 15px 40px; font-size: 1.2rem; background: #007bff; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        .hint-msg { color: #bbb; font-size: 0.85rem; margin-top: 30px; letter-spacing: -0.5px; }
+        .info { font-size: 0.9rem; color: #888; margin-bottom: 15px; }
+        
+        input { padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #eee; border-radius: 12px; margin-bottom: 20px; outline: none; }
+        button.start-btn { padding: 15px 45px; font-size: 1.2rem; background: #007bff; color: white; border: none; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <div id="timer-display" style="display:none;">00:00</div>
+
     <div id="setup">
         <h2>🎯 영어 퀴즈 설정</h2>
-        <p class="info" id="total-info">파일 로딩 중...</p>
+        <p class="info" id="total-info">데이터 확인 중...</p>
         <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)">
         <br>
-        <button class="start-btn" onclick="startQuiz()">퀴즈 시작</button>
+        <button class="start-btn" onclick="startQuiz()">시작하기</button>
     </div>
 
     <div id="quiz" class="quiz-container" style="display:none;" onclick="handleScreenTouch()">
         <div class="info" id="progress"></div>
         <div class="card">
             <div class="kor-text" id="kor-text"></div>
-            <div class="eng-text" id="eng-text" style="visibility: hidden;"></div>
-            <div class="hint-msg" id="hint-msg">화면을 터치하면 정답이 보여요</div>
+            <div id="eng-text-container">
+                <div class="eng-text" id="eng-text" style="visibility: hidden;"></div>
+            </div>
+            <div class="hint-msg" id="hint-msg">터치하면 정답이 보여요</div>
         </div>
     </div>
 
@@ -68,8 +89,9 @@
         let quizList = [];
         let currentIndex = 0;
         let isShowingAnswer = false;
+        let startTime;
+        let timerInterval;
 
-        // 파일 읽기
         fetch('English_Sentences.txt')
             .then(response => response.text())
             .then(text => {
@@ -83,8 +105,19 @@
                         allData.push({ num: parseInt(parts[0].trim()), kor: parts[1].trim(), eng: parts[2].trim() });
                     }
                 });
-                document.getElementById('total-info').innerText = `✅ 총 ${allData.length}개 문장 준비됨`;
+                document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장 로드 완료`;
             });
+
+        function startTimer() {
+            startTime = Date.now();
+            document.getElementById('timer-display').style.display = 'block';
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+                const secs = String(elapsed % 60).padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
 
         function startQuiz() {
             const input = document.getElementById('page-input').value;
@@ -99,39 +132,39 @@
             });
 
             quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
-
-            if (quizList.length === 0) return alert('장 번호를 확인해주세요! (1~20)');
-            quizList.sort(() => Math.random() - 0.5);
+            if (quizList.length === 0) return alert('장 번호를 다시 확인해주세요!');
             
+            quizList.sort(() => Math.random() - 0.5);
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
+            
+            startTimer();
             showQuestion();
         }
 
         function showQuestion() {
             const q = quizList[currentIndex];
-            document.getElementById('progress').innerText = `진행: ${currentIndex + 1} / ${quizList.length}`;
-            document.getElementById('kor-text').innerText = `👉 ${q.kor}`;
+            document.getElementById('progress').innerText = `문항: ${currentIndex + 1} / ${quizList.length}`;
+            document.getElementById('kor-text').innerText = q.kor;
             document.getElementById('eng-text').innerText = q.eng;
             document.getElementById('eng-text').style.visibility = 'hidden';
-            document.getElementById('hint-msg').innerText = '화면을 터치하면 정답이 보여요';
+            document.getElementById('hint-msg').innerText = '터치하면 정답이 보여요';
             isShowingAnswer = false;
         }
 
-        // 화면 어디든 터치했을 때 실행되는 함수
         function handleScreenTouch() {
             if (!isShowingAnswer) {
-                // 정답 보여주기
                 document.getElementById('eng-text').style.visibility = 'visible';
-                document.getElementById('hint-msg').innerText = '한 번 더 터치하면 다음 문제로!';
+                document.getElementById('hint-msg').innerText = '다시 터치하면 다음 문제';
                 isShowingAnswer = true;
             } else {
-                // 다음 문제로 넘어가기
                 currentIndex++;
                 if (currentIndex < quizList.length) {
                     showQuestion();
                 } else {
-                    alert('🎉 모든 문제를 완료했습니다!');
+                    clearInterval(timerInterval);
+                    const finalTime = document.getElementById('timer-display').innerText;
+                    alert(`🎉 학습 완료!\n⏱ 소요 시간: ${finalTime}`);
                     location.reload();
                 }
             }
