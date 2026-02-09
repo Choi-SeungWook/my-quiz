@@ -205,4 +205,77 @@
             isShowingAnswer = false;
             isMarkedFailed = false;
             
-            document.
+            document.getElementById('progress').innerText = `라운드 ${roundCount} | ${currentIndex + 1} / ${quizList.length}`;
+            document.getElementById('repeat-info').style.display = roundCount > 1 ? 'inline-block' : 'none';
+            document.getElementById('kor-text').innerText = q.kor;
+            document.getElementById('eng-text').innerText = q.eng;
+            document.getElementById('eng-text').style.visibility = 'hidden';
+            document.getElementById('hint-msg').innerText = '터치/엔터: 정답 보기';
+            
+            const fBtn = document.getElementById('fail-btn');
+            fBtn.style.visibility = 'hidden';
+            fBtn.classList.remove('active');
+            fBtn.innerText = "이 문장 잘 몰라요 (체크)";
+        }
+
+        function handleInteraction() {
+            if (!isShowingAnswer) {
+                document.getElementById('eng-text').style.visibility = 'visible';
+                document.getElementById('hint-msg').innerText = '터치/엔터: 다음 문제로';
+                document.getElementById('fail-btn').style.visibility = 'visible';
+                isShowingAnswer = true;
+            } else {
+                if (isMarkedFailed) reviewList.push(quizList[currentIndex]);
+                currentIndex++;
+                if (currentIndex < quizList.length) {
+                    showQuestion();
+                } else {
+                    nextRound();
+                }
+            }
+        }
+
+        function markAsFailed(event) {
+            event.stopPropagation();
+            isMarkedFailed = !isMarkedFailed;
+            const fBtn = document.getElementById('fail-btn');
+            if (isMarkedFailed) {
+                fBtn.classList.add('active');
+                fBtn.innerText = "✓ 체크됨 (나중에 다시 나옴)";
+            } else {
+                fBtn.classList.remove('active');
+                fBtn.innerText = "이 문장 잘 몰라요 (체크)";
+            }
+        }
+
+        function nextRound() {
+            if (reviewList.length > 0) {
+                alert(`라운드 종료! 체크한 ${reviewList.length}문장을 다시 학습합니다.`);
+                quizList = [...reviewList];
+                reviewList = [];
+                currentIndex = 0;
+                roundCount++;
+                showQuestion();
+            } else {
+                clearInterval(timerInterval);
+                alert(`🎉 학습 완료!\n소요 시간: ${document.getElementById('timer-display').innerText}`);
+                location.reload();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('quiz').style.display === 'flex') {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleInteraction();
+                }
+                if (e.key === 'm' || e.key === 'M') {
+                    if (isShowingAnswer) markAsFailed(new Event('keydown'));
+                }
+            } else if (e.key === 'Enter') {
+                startQuiz();
+            }
+        });
+    </script>
+</body>
+</html>
