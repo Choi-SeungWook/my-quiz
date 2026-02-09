@@ -192,6 +192,18 @@
                 }
             }
         }
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('quiz').style.display === 'flex'){
+                if (event.key === 'Enter' || event.key === ' ') { 
+                    event.preventDefault();
+                    handleScreenTouch();
+                }
+            }
+            else if (document.getElementById('setup').style.display !== 'none') {
+                if (event.key === 'Enter') { startQuiz(); }
+            }
+        });
     </script>
 </body>
 </html>
+
