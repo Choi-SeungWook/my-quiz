@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>영어 문장 퀴즈</title>
+    <title>영어 문장 퀴즈 Pro</title>
     <style>
         body { 
             font-family: -apple-system, sans-serif; 
@@ -11,12 +11,12 @@
             padding: 0; 
             margin: 0; 
             background-color: #f8f9fa; 
-            height: 100vh; /* 화면 전체 높이 사용 */
+            height: 100vh; 
             display: flex; 
             flex-direction: column;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            overflow: hidden; /* 스크롤 방지로 중앙 고정 */
+            overflow: hidden; 
         }
         
         #timer-display {
@@ -33,12 +33,11 @@
             z-index: 1000;
         }
 
-        /* 설정 화면과 퀴즈 컨테이너 모두 정중앙 배치 */
         #setup, .quiz-container { 
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* 진정한 정중앙 정렬 */
+            transform: translate(-50%, -50%);
             width: 100%;
             display: flex; 
             flex-direction: column; 
@@ -50,7 +49,7 @@
         .info-progress { 
             font-size: 1rem; 
             color: #888; 
-            margin-bottom: 30px; 
+            margin-bottom: 20px; 
             font-weight: 500;
         }
 
@@ -58,17 +57,20 @@
             background: white; 
             width: 90%; 
             max-width: 500px; 
-            padding: 50px 20px; 
+            padding: 40px 20px; 
             border-radius: 25px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            position: relative;
         }
 
         h2 { margin-top: 0; margin-bottom: 10px; color: #333; }
-        .kor-text { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 25px; line-height: 1.4; }
-        .eng-text { font-size: 1.4rem; color: #28a745; font-weight: 600; min-height: 1.5em; }
-        .hint-msg { color: #bbb; font-size: 0.85rem; margin-top: 30px; letter-spacing: -0.5px; }
+        .kor-text { font-size: 1.4rem; font-weight: bold; color: #333; margin-bottom: 20px; line-height: 1.4; word-break: keep-all; }
+        .eng-text { font-size: 1.3rem; color: #28a745; font-weight: 600; min-height: 1.5em; margin-bottom: 20px; }
+        .hint-msg { color: #bbb; font-size: 0.85rem; margin-top: 10px; }
         
-        .info-setup { font-size: 0.9rem; color: #888; margin-bottom: 25px; }
+        /* 설정 스타일 추가 */
+        .option-group { margin-bottom: 20px; background: #eee; padding: 10px; border-radius: 12px; }
+        .option-group label { margin: 0 10px; cursor: pointer; font-weight: bold; }
         
         input { 
             padding: 15px; 
@@ -81,7 +83,24 @@
             outline: none; 
             text-align: center;
         }
-        button.start-btn { padding: 15px 45px; font-size: 1.2rem; background: #007bff; color: white; border: none; border-radius: 12px; font-weight: bold; }
+        
+        .btn-group { display: flex; gap: 10px; justify-content: center; width: 90%; max-width: 400px; margin-top: 20px; }
+        button { border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .start-btn { padding: 15px 45px; font-size: 1.2rem; background: #007bff; color: white; }
+        
+        /* 퀴즈 하단 버튼 */
+        .know-btn { flex: 1; padding: 15px; background: #28a745; color: white; font-size: 1.1rem; }
+        .dont-know-btn { flex: 1; padding: 15px; background: #dc3545; color: white; font-size: 1.1rem; }
+        
+        .repeat-badge {
+            background: #ffc107;
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -90,31 +109,43 @@
 
     <div id="setup">
         <h2>🎯 영어 퀴즈 설정</h2>
-        <p class="info-setup" id="total-info">데이터 확인 중...</p>
+        <p id="total-info" style="color:#888;">데이터 확인 중...</p>
         <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)">
-        <br>
+        
+        <div class="option-group">
+            <label><input type="radio" name="order" value="seq" checked> 순서대로</label>
+            <label><input type="radio" name="order" value="rand"> 랜덤하게</label>
+        </div>
+
         <button class="start-btn" onclick="startQuiz()">시작하기</button>
     </div>
 
-    <div id="quiz" class="quiz-container" style="display:none;" onclick="handleScreenTouch()">
+    <div id="quiz" class="quiz-container" style="display:none;">
         <div class="info-progress" id="progress"></div>
-        <div class="card">
+        <div class="card" onclick="revealAnswer()">
+            <div id="repeat-info" class="repeat-badge" style="display:none;">재학습 중</div>
             <div class="kor-text" id="kor-text"></div>
-            <div id="eng-text-container">
-                <div class="eng-text" id="eng-text" style="visibility: hidden;"></div>
-            </div>
-            <div class="hint-msg" id="hint-msg">터치하면 정답이 보여요</div>
+            <div class="eng-text" id="eng-text" style="visibility: hidden;"></div>
+            <div class="hint-msg" id="hint-msg">화면을 터치하면 정답이 보여요</div>
+        </div>
+
+        <div id="answer-controls" class="btn-group" style="display:none;">
+            <button class="dont-know-btn" onclick="handleResult(false)">모르겠어요</button>
+            <button class="know-btn" onclick="handleResult(true)">알겠어요</button>
         </div>
     </div>
 
     <script>
         let allData = [];
-        let quizList = [];
+        let quizList = [];       // 현재 라운드 문제
+        let reviewList = [];     // '모름' 선택한 문제 저장
         let currentIndex = 0;
         let isShowingAnswer = false;
         let startTime;
         let timerInterval;
+        let roundCount = 1;
 
+        // 데이터 로드 (파일 경로는 기존과 동일)
         fetch('English_Sentences.txt')
             .then(response => response.text())
             .then(text => {
@@ -144,7 +175,9 @@
 
         function startQuiz() {
             const input = document.getElementById('page-input').value;
+            const order = document.querySelector('input[name="order"]:checked').value;
             const pages = new Set();
+
             input.split(',').forEach(p => {
                 if (p.includes('-')) {
                     const [start, end] = p.split('-').map(Number);
@@ -157,7 +190,13 @@
             quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
             if (quizList.length === 0) return alert('장 번호를 다시 확인해주세요!');
             
-            quizList.sort(() => Math.random() - 0.5);
+            // 순서 설정
+            if (order === 'rand') {
+                quizList.sort(() => Math.random() - 0.5);
+            } else {
+                quizList.sort((a, b) => a.num - b.num);
+            }
+
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
             
@@ -167,43 +206,72 @@
 
         function showQuestion() {
             const q = quizList[currentIndex];
-            document.getElementById('progress').innerText = `문항: ${currentIndex + 1} / ${quizList.length}`;
+            const isReview = roundCount > 1;
+            
+            document.getElementById('progress').innerText = `라운드 ${roundCount} | 문항: ${currentIndex + 1} / ${quizList.length}`;
+            document.getElementById('repeat-info').style.display = isReview ? 'inline-block' : 'none';
             document.getElementById('kor-text').innerText = q.kor;
             document.getElementById('eng-text').innerText = q.eng;
             document.getElementById('eng-text').style.visibility = 'hidden';
-            document.getElementById('hint-msg').innerText = '터치하면 정답이 보여요';
+            document.getElementById('hint-msg').style.display = 'block';
+            document.getElementById('answer-controls').style.display = 'none';
             isShowingAnswer = false;
         }
 
-        function handleScreenTouch() {
-            if (!isShowingAnswer) {
-                document.getElementById('eng-text').style.visibility = 'visible';
-                document.getElementById('hint-msg').innerText = '다시 터치하면 다음 문제';
-                isShowingAnswer = true;
+        // 화면 터치 시 정답 공개
+        function revealAnswer() {
+            if (isShowingAnswer) return;
+            document.getElementById('eng-text').style.visibility = 'visible';
+            document.getElementById('hint-msg').style.display = 'none';
+            document.getElementById('answer-controls').style.display = 'flex';
+            isShowingAnswer = true;
+        }
+
+        // 알아요(true) / 몰라요(false) 처리
+        function handleResult(knows) {
+            if (!knows) {
+                reviewList.push(quizList[currentIndex]);
+            }
+
+            currentIndex++;
+            if (currentIndex < quizList.length) {
+                showQuestion();
             } else {
-                currentIndex++;
-                if (currentIndex < quizList.length) {
-                    showQuestion();
-                } else {
-                    clearInterval(timerInterval);
-                    const finalTime = document.getElementById('timer-display').innerText;
-                    alert(`🎉 학습 완료!\n⏱ 소요 시간: ${finalTime}`);
-                    location.reload();
-                }
+                checkNextRound();
             }
         }
-        document.addEventListener('keydown', function(event) {
-            if (document.getElementById('quiz').style.display === 'flex'){
-                if (event.key === 'Enter' || event.key === ' ') { 
-                    event.preventDefault();
-                    handleScreenTouch();
-                }
+
+        function checkNextRound() {
+            if (reviewList.length > 0) {
+                alert(`한 바퀴 완료! 모르는 문제 ${reviewList.length}개를 다시 학습합니다.`);
+                quizList = [...reviewList]; // 오답 리스트를 다음 퀴즈 리스트로
+                reviewList = [];           // 오답 리스트 초기화
+                currentIndex = 0;
+                roundCount++;
+                showQuestion();
+            } else {
+                clearInterval(timerInterval);
+                const finalTime = document.getElementById('timer-display').innerText;
+                alert(`🎉 축하합니다! 모든 문장을 마스터했습니다.\n⏱ 총 소요 시간: ${finalTime}`);
+                location.reload();
             }
-            else if (document.getElementById('setup').style.display !== 'none') {
-                if (event.key === 'Enter') { startQuiz(); }
+        }
+
+        // 키보드 단축키 추가
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('quiz').style.display === 'flex') {
+                if (!isShowingAnswer) {
+                    if (event.key === ' ' || event.key === 'Enter') revealAnswer();
+                } else {
+                    if (event.key === '1' || event.key === 'ArrowLeft') handleResult(false); // 1번이나 왼쪽화살표: 모름
+                    if (event.key === '2' || event.key === 'ArrowRight') handleResult(true); // 2번이나 오른쪽화살표: 알음
+                }
+            } else if (document.getElementById('setup').style.display !== 'none') {
+                if (event.key === 'Enter') startQuiz();
             }
         });
     </script>
 </body>
 </html>
+
 
