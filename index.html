@@ -23,10 +23,9 @@
             width: 90%; max-width: 500px; display: flex; flex-direction: column; align-items: center; 
         }
 
-        /* 설정 화면 가독성 개선 */
         .setup-card {
             background: white; width: 100%; padding: 30px 20px; border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); box-sizing: border-box;
         }
         
         .option-group { 
@@ -41,18 +40,17 @@
             border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center;
         }
 
-        /* 퀴즈 카드 디자인 */
         .info-progress { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
         .card { 
             background: white; width: 100%; padding: 50px 25px; border-radius: 25px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; box-sizing: border-box;
+            cursor: pointer;
         }
 
         .kor-text { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 25px; line-height: 1.4; word-break: keep-all; }
         .eng-text { font-size: 1.4rem; color: #28a745; font-weight: 600; min-height: 1.5em; }
         .hint-msg { color: #bbb; font-size: 0.85rem; margin-top: 30px; }
 
-        /* 버튼 영역 */
         .controls { width: 100%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
         .btn { border: none; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1.1rem; }
         .start-btn { padding: 16px; background: #007bff; color: white; width: 100%; margin-top: 10px; }
@@ -76,7 +74,7 @@
     <div id="setup">
         <div class="setup-card">
             <h2>🎯 영어 퀴즈 설정</h2>
-            <p id="total-info" style="color:#888; font-size: 0.9rem;">데이터 확인 중...</p>
+            <p id="total-info" style="color:#d9534f; font-size: 0.9rem; font-weight: bold;">데이터 로드 대기 중...</p>
             <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)">
             
             <div class="option-group">
@@ -114,17 +112,97 @@
         let isMarkedFailed = false;
         let startTime, timerInterval, roundCount = 1;
 
-        // 데이터 로드
-        fetch('English_Sentences.txt')
-            .then(response => response.text())
+        // [데이터 로드 부분 보강]
+        const dataFileName = 'English_Sentences.txt';
+
+        fetch(dataFileName)
+            .then(response => {
+                if (!response.ok) throw new Error(`파일을 찾을 수 없습니다. (${dataFileName})`);
+                return response.text();
+            })
             .then(text => {
-                text.split('\n').forEach(line => {
+                // 줄바꿈 기호 통합 처리 (\r\n 또는 \n)
+                const lines = text.split(/\r?\n/);
+                lines.forEach((line, index) => {
                     let cleanLine = line.trim();
                     if (!cleanLine) return;
-                    if (cleanLine.includes(']')) cleanLine = cleanLine.split(']').pop().trim();
+
+                    // 말머리 [숫자] 제거
+                    if (cleanLine.includes(']')) {
+                        cleanLine = cleanLine.split(']').pop().trim();
+                    }
+
+                    // 콤마로 데이터 분리
                     const parts = cleanLine.split(',');
-                    if (parts.length >= 3 && !isNaN(parts[0].trim())) {
-                        allData.push({ num: parseInt(parts[0].trim()), kor: parts[1].trim(), eng: parts[2].trim() });
+                    if (parts.length >= 3) {
+                        const num = parseInt(parts[0].trim());
+                        if (!isNaN(num)) {
+                            allData.push({ 
+                                num: num, 
+                                kor: parts[1].trim(), 
+                                eng: parts[2].trim() 
+                            });
+                        }
                     }
                 });
-                document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장
+
+                if (allData.length === 0) {
+                    document.getElementById('total-info').innerText = "⚠️ 파일 내용은 읽었으나 데이터 형식이 맞지 않습니다.";
+                } else {
+                    document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장 로드 완료`;
+                    document.getElementById('total-info').style.color = "#28a745";
+                }
+            })
+            .catch(error => {
+                document.getElementById('total-info').innerText = `❌ 에러: ${error.message}`;
+                console.error("Data Load Error:", error);
+            });
+
+        function startQuiz() {
+            if (allData.length === 0) return alert('데이터가 로드되지 않았습니다.');
+            
+            const input = document.getElementById('page-input').value;
+            if (!input.trim()) return alert('장 번호를 입력해주세요 (예: 1)');
+
+            const order = document.querySelector('input[name="order"]:checked').value;
+            const pages = new Set();
+
+            input.split(',').forEach(p => {
+                if (p.includes('-')) {
+                    const [start, end] = p.split('-').map(Number);
+                    for (let i = Math.min(start, end); i <= Math.max(start, end); i++) pages.add(i);
+                } else if (!isNaN(p.trim()) && p.trim() !== "") {
+                    pages.add(parseInt(p.trim()));
+                }
+            });
+
+            // 페이지당 30문장 기준 필터링
+            quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
+            
+            if (quizList.length === 0) return alert('해당 장에 데이터가 없습니다. 번호를 확인하세요!');
+            
+            if (order === 'rand') quizList.sort(() => Math.random() - 0.5);
+            else quizList.sort((a, b) => a.num - b.num);
+
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('quiz').style.display = 'flex';
+            
+            startTime = Date.now();
+            document.getElementById('timer-display').style.display = 'block';
+            timerInterval = setInterval(updateTimer, 1000);
+            showQuestion();
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const s = String(elapsed % 60).padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        }
+
+        function showQuestion() {
+            const q = quizList[currentIndex];
+            isShowingAnswer = false;
+            isMarkedFailed = false;
+            
+            document.
