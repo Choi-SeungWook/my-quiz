@@ -142,7 +142,7 @@
 142,걔한테 욕하지 마.,Stop calling him names.
 143,이름값 좀 해라.,Live up to your name.
 144,걔는 아무짝에도 쓸모가 없어.,He's a good-for-nothing.
-145,너 발맞이야.,You put me off.
+145,너 밥맛이야.,You put me off.
 146,너에게 똑같이 갚아 주마.,I'll get even with you.
 147,그는 너한테 원한을 품고 있어.,He has a grudge against you.
 148,쟤 손 좀 봐줘야겠어.,I'm going to teach him a lesson.
@@ -176,7 +176,7 @@
 176,너한테 쏘아붙여서 미안해.,Sorry I snapped at you.
 177,기분 상하게 했다면 미안해.,Sorry if I offended you.
 178,대놓고 말해서 미안해.,Pardon my bluntness.
-179,기분 나쁜 거 아니지?,No hard feelings, I hope.
+179,기분 나쁜 거 아니지?,No hard feelings I hope.
 180,우리 화해합시다.,Let's bury the hatchet.
 181,날짜를 정하자.,Let's set a date.
 182,언제 다 같이 보자.,Let's all get together sometime.
@@ -597,4 +597,5 @@
 597,난 새 사람이 됐어.,I turned over a new leaf.
 598,이미 지난 일이야.,It's water under the bridge.
 599,지나간 일은 잊어버리자.,Let bygones be bygones.
+
 600,이 또한 지나갈 거야.,This too shall pass.
