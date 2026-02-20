@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>영어 문장 퀴즈 Pro (Dark Mode)</title>
+    <title>영어 문장 퀴즈 Pro (Cloud Sync)</title>
     <style>
-        /* 기본 배경 및 텍스트 색상 변경 */
+        /* 기본 배경 및 텍스트 색상 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             text-align: center; padding: 0; margin: 0; 
-            background-color: #121212; /* 아주 어두운 회색 */
-            color: #e0e0e0; /* 밝은 회색 텍스트 */
+            background-color: #121212; color: #e0e0e0; 
             height: 100vh; display: flex; flex-direction: column;
             user-select: none; -webkit-tap-highlight-color: transparent; overflow: hidden; 
         }
@@ -27,7 +26,6 @@
             width: 90%; max-width: 500px; display: flex; flex-direction: column; align-items: center; 
         }
 
-        /* 카드 배경 어둡게 조정 */
         .setup-card {
             background: #1e1e1e; width: 100%; padding: 30px 20px; border-radius: 20px;
             box-shadow: 0 4px 25px rgba(0,0,0,0.5); box-sizing: border-box;
@@ -41,13 +39,11 @@
         .option-item { display: flex; align-items: center; cursor: pointer; font-size: 1.1rem; font-weight: 500; color: #ccc; }
         .option-item input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; filter: invert(1); }
         
-        /* 입력창 어둡게 */
         input[type="text"] { 
             padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #444; 
             background-color: #2c2c2c; color: #fff;
             border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center;
         }
-        input[type="text"]::placeholder { color: #888; }
 
         .info-progress { font-size: 0.9rem; color: #999; margin-bottom: 15px; }
         
@@ -58,17 +54,19 @@
         }
 
         .kor-text { font-size: 1.5rem; font-weight: bold; color: #ffffff; margin-bottom: 25px; line-height: 1.4; word-break: keep-all; }
-        .eng-text { font-size: 1.4rem; color: #4ade80; font-weight: 600; min-height: 1.5em; } /* 형광 초록 계열 */
+        .eng-text { font-size: 1.4rem; color: #4ade80; font-weight: 600; min-height: 1.5em; }
         .hint-msg { color: #666; font-size: 0.85rem; margin-top: 30px; }
 
         .controls { width: 100%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
         .btn { border: none; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1.1rem; }
         
-        /* 시작 버튼: 파란색 유지하되 살짝 차분하게 */
         .start-btn { padding: 16px; background: #0062cc; color: white; width: 100%; margin-top: 10px; }
-        .start-btn:active { background: #004a99; }
+        .review-start-btn { padding: 16px; background: #8e44ad; color: white; width: 100%; margin-top: 10px; }
+        .review-start-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
         
-        /* 오답 체크 버튼 */
+        .sync-btn-group { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
+        .sync-btn { flex: 1; padding: 10px; background: #2c3e50; color: #bdc3c7; font-size: 0.8rem; border-radius: 10px; }
+
         .dont-know-btn { 
             padding: 12px; background: transparent; color: #ff6b6b; border: 2px solid #ff6b6b; 
             font-size: 0.9rem; width: fit-content; margin: 0 auto;
@@ -79,8 +77,7 @@
             background: #f1c40f; color: #000; padding: 4px 12px; border-radius: 10px;
             font-size: 0.8rem; margin-bottom: 15px; font-weight: bold;
         }
-
-        h2 { color: #fff; }
+        h2 { color: #fff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -90,7 +87,8 @@
     <div id="setup">
         <div class="setup-card">
             <h2>🎯 영어 퀴즈 설정</h2>
-            <p id="total-info" style="color:#ff6b6b; font-size: 0.9rem; font-weight: bold;">데이터 로드 대기 중...</p>
+            <p id="total-info" style="color:#ff6b6b; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px;">데이터 로드 대기 중...</p>
+            
             <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)">
             
             <div class="option-group">
@@ -98,7 +96,13 @@
                 <label class="option-item"><input type="radio" name="order" value="rand"> 랜덤하게</label>
             </div>
 
-            <button class="btn start-btn" onclick="startQuiz()">시작하기</button>
+            <button class="btn start-btn" onclick="startQuiz('normal')">학습 시작하기</button>
+            <button id="review-btn" class="btn review-start-btn" onclick="startQuiz('review')">❌ 모르는 문장 복습 (0)</button>
+
+            <div class="sync-btn-group">
+                <button class="btn sync-btn" onclick="syncToGithub()">📤 서버로 내보내기</button>
+                <button class="btn sync-btn" onclick="fetchFromGithub()">📥 서버에서 가져오기</button>
+            </div>
         </div>
     </div>
 
@@ -113,91 +117,158 @@
         </div>
 
         <div class="controls">
-            <button id="fail-btn" class="btn dont-know-btn" style="visibility: hidden;" onclick="markAsFailed(event)">
+            <button id="fail-btn" class="btn dont-know-btn" style="visibility: hidden;" onclick="toggleFailedList(event)">
                 이 문장 잘 몰라요 (체크)
             </button>
         </div>
     </div>
 
     <script>
+        /* --- [설정 섹션: 본인의 정보로 수정하세요] --- */
+        const OWNER = '내_깃허브_아이디'; 
+        const REPO = '저장소_이름';      
+        const FILE_PATH = 'failed_list.json'; 
+        const DATA_FILE = 'English_Sentences.txt';
+        const STORAGE_KEY = 'failed_sentences';
+
         let allData = [];
         let quizList = [];
         let reviewList = [];
         let currentIndex = 0;
         let isShowingAnswer = false;
-        let isMarkedFailed = false;
         let startTime, timerInterval, roundCount = 1;
 
-        const dataFileName = 'English_Sentences.txt';
-
-        fetch(dataFileName)
-            .then(response => {
-                if (!response.ok) throw new Error(`파일을 찾을 수 없습니다. (${dataFileName})`);
-                return response.text();
+        /* --- [데이터 로드] --- */
+        fetch(DATA_FILE)
+            .then(res => {
+                if (!res.ok) throw new Error("파일 로드 실패");
+                return res.text();
             })
             .then(text => {
                 const lines = text.split(/\r?\n/);
-                lines.forEach((line) => {
+                lines.forEach(line => {
                     let cleanLine = line.trim();
                     if (!cleanLine) return;
-
-                    if (cleanLine.includes(']')) {
-                        cleanLine = cleanLine.split(']').pop().trim();
-                    }
-
+                    if (cleanLine.includes(']')) cleanLine = cleanLine.split(']').pop().trim();
                     const parts = cleanLine.split(',');
                     if (parts.length >= 3) {
                         const num = parseInt(parts[0].trim());
-                        if (!isNaN(num)) {
-                            allData.push({ 
-                                num: num, 
-                                kor: parts[1].trim(), 
-                                eng: parts[2].trim() 
-                            });
-                        }
+                        if (!isNaN(num)) allData.push({ num, kor: parts[1].trim(), eng: parts[2].trim() });
                     }
                 });
-
-                if (allData.length === 0) {
-                    document.getElementById('total-info').innerText = "⚠️ 파일 내용은 읽었으나 데이터 형식이 맞지 않습니다.";
-                } else {
+                if (allData.length > 0) {
                     document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장 로드 완료`;
                     document.getElementById('total-info').style.color = "#4ade80";
+                    updateReviewButtonCount();
                 }
             })
-            .catch(error => {
-                document.getElementById('total-info').innerText = `❌ 에러: ${error.message}`;
-                console.error("Data Load Error:", error);
-            });
+            .catch(err => document.getElementById('total-info').innerText = `❌ 에러: ${err.message}`);
 
-        function startQuiz() {
-            if (allData.length === 0) return alert('데이터가 로드되지 않았습니다.');
-            
-            const input = document.getElementById('page-input').value;
-            if (!input.trim()) return alert('장 번호를 입력해주세요 (예: 1)');
+        /* --- [로컬스토리지 관리] --- */
+        function getFailedIDs() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
 
-            const order = document.querySelector('input[name="order"]:checked').value;
-            const pages = new Set();
+        function updateReviewButtonCount() {
+            const count = getFailedIDs().length;
+            const btn = document.getElementById('review-btn');
+            btn.innerText = `❌ 모르는 문장 복습 (${count})`;
+            btn.disabled = count === 0;
+        }
 
-            input.split(',').forEach(p => {
-                if (p.includes('-')) {
-                    const [start, end] = p.split('-').map(Number);
-                    for (let i = Math.min(start, end); i <= Math.max(start, end); i++) pages.add(i);
-                } else if (!isNaN(p.trim()) && p.trim() !== "") {
-                    pages.add(parseInt(p.trim()));
+        function toggleFailedList(event) {
+            if (event) event.stopPropagation();
+            const q = quizList[currentIndex];
+            let failedIDs = getFailedIDs();
+            const fBtn = document.getElementById('fail-btn');
+
+            if (!failedIDs.includes(q.num)) {
+                failedIDs.push(q.num);
+                fBtn.classList.add('active');
+                fBtn.innerText = "✓ 체크됨 (영구 저장)";
+            } else {
+                failedIDs = failedIDs.filter(id => id !== q.num);
+                fBtn.classList.remove('active');
+                fBtn.innerText = "이 문장 잘 몰라요 (체크)";
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(failedIDs));
+            updateReviewButtonCount();
+        }
+
+        /* --- [GitHub 클라우드 동기화] --- */
+        async function syncToGithub() {
+            const ids = getFailedIDs();
+            const token = prompt("GitHub Token을 입력하세요:");
+            if (!token) return;
+
+            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+            let sha = null;
+
+            try {
+                const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
+                if (res.ok) {
+                    const data = await res.json();
+                    sha = data.sha;
                 }
-            });
 
-            quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
-            
-            if (quizList.length === 0) return alert('해당 장에 데이터가 없습니다. 번호를 확인하세요!');
-            
+                const putRes = await fetch(url, {
+                    method: "PUT",
+                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message: "Cloud Sync: Update failed list",
+                        content: btoa(JSON.stringify(ids)),
+                        sha: sha
+                    })
+                });
+
+                if (putRes.ok) alert("✅ 서버로 내보내기 완료!");
+                else alert("❌ 실패: 권한이나 설정을 확인하세요.");
+            } catch (e) { alert("오류 발생: " + e.message); }
+        }
+
+        async function fetchFromGithub() {
+            const token = prompt("GitHub Token을 입력하세요:");
+            if (!token) return;
+
+            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+            try {
+                const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
+                if (res.ok) {
+                    const data = await res.json();
+                    const ids = JSON.parse(atob(data.content));
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+                    updateReviewButtonCount();
+                    alert(`✅ 서버에서 ${ids.length}개를 가져왔습니다!`);
+                } else alert("❌ 서버에 저장된 파일이 없습니다.");
+            } catch (e) { alert("오류 발생: " + e.message); }
+        }
+
+        /* --- [퀴즈 로직] --- */
+        function startQuiz(mode) {
+            const order = document.querySelector('input[name="order"]:checked').value;
+            if (mode === 'normal') {
+                const input = document.getElementById('page-input').value;
+                if (!input.trim()) return alert("장 번호를 입력하세요.");
+                const pages = new Set();
+                input.split(',').forEach(p => {
+                    if (p.includes('-')) {
+                        const [s, e] = p.split('-').map(Number);
+                        for (let i = Math.min(s,e); i <= Math.max(s,e); i++) pages.add(i);
+                    } else if (p.trim()) pages.add(parseInt(p.trim()));
+                });
+                quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
+            } else {
+                const ids = getFailedIDs();
+                quizList = allData.filter(d => ids.includes(d.num));
+            }
+
+            if (quizList.length === 0) return alert("해당하는 문장이 없습니다.");
             if (order === 'rand') quizList.sort(() => Math.random() - 0.5);
-            else quizList.sort((a, b) => a.num - b.num);
+            else quizList.sort((a,b) => a.num - b.num);
 
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
-            
             startTime = Date.now();
             document.getElementById('timer-display').style.display = 'block';
             timerInterval = setInterval(updateTimer, 1000);
@@ -214,9 +285,7 @@
         function showQuestion() {
             const q = quizList[currentIndex];
             isShowingAnswer = false;
-            isMarkedFailed = false;
-            
-            document.getElementById('progress').innerText = `라운드 ${roundCount} | ${currentIndex + 1} / ${quizList.length}`;
+            document.getElementById('progress').innerText = `Round ${roundCount} | ${currentIndex + 1} / ${quizList.length}`;
             document.getElementById('repeat-info').style.display = roundCount > 1 ? 'inline-block' : 'none';
             document.getElementById('kor-text').innerText = q.kor;
             document.getElementById('eng-text').innerText = q.eng;
@@ -225,43 +294,34 @@
             
             const fBtn = document.getElementById('fail-btn');
             fBtn.style.visibility = 'hidden';
-            fBtn.classList.remove('active');
-            fBtn.innerText = "이 문장 잘 몰라요 (체크)";
-        }
-
-        function handleInteraction() {
-            if (!isShowingAnswer) {
-                document.getElementById('eng-text').style.visibility = 'visible';
-                document.getElementById('hint-msg').innerText = '터치/엔터: 다음 문제로';
-                document.getElementById('fail-btn').style.visibility = 'visible';
-                isShowingAnswer = true;
-            } else {
-                if (isMarkedFailed) reviewList.push(quizList[currentIndex]);
-                currentIndex++;
-                if (currentIndex < quizList.length) {
-                    showQuestion();
-                } else {
-                    nextRound();
-                }
-            }
-        }
-
-        function markAsFailed(event) {
-            event.stopPropagation();
-            isMarkedFailed = !isMarkedFailed;
-            const fBtn = document.getElementById('fail-btn');
-            if (isMarkedFailed) {
+            if (getFailedIDs().includes(q.num)) {
                 fBtn.classList.add('active');
-                fBtn.innerText = "✓ 체크됨 (나중에 다시 나옴)";
+                fBtn.innerText = "✓ 체크됨 (영구 저장)";
             } else {
                 fBtn.classList.remove('active');
                 fBtn.innerText = "이 문장 잘 몰라요 (체크)";
             }
         }
 
+        function handleInteraction() {
+            if (!isShowingAnswer) {
+                document.getElementById('eng-text').style.visibility = 'visible';
+                document.getElementById('hint-msg').innerText = '터치/엔터: 다음 문제';
+                document.getElementById('fail-btn').style.visibility = 'visible';
+                isShowingAnswer = true;
+            } else {
+                if (document.getElementById('fail-btn').classList.contains('active')) {
+                    reviewList.push(quizList[currentIndex]);
+                }
+                currentIndex++;
+                if (currentIndex < quizList.length) showQuestion();
+                else nextRound();
+            }
+        }
+
         function nextRound() {
             if (reviewList.length > 0) {
-                alert(`라운드 종료! 체크한 ${reviewList.length}문장을 다시 학습합니다.`);
+                alert(`라운드 종료! 체크한 ${reviewList.length}문장을 다시 반복합니다.`);
                 quizList = [...reviewList];
                 reviewList = [];
                 currentIndex = 0;
@@ -269,23 +329,16 @@
                 showQuestion();
             } else {
                 clearInterval(timerInterval);
-                alert(`🎉 학습 완료!\n소요 시간: ${document.getElementById('timer-display').innerText}`);
+                alert(`🎉 학습 완료! 소요 시간: ${document.getElementById('timer-display').innerText}`);
                 location.reload();
             }
         }
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('quiz').style.display === 'flex') {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleInteraction();
-                }
-                if (e.key === 'm' || e.key === 'M') {
-                    if (isShowingAnswer) markAsFailed(new Event('keydown'));
-                }
-            } else if (e.key === 'Enter') {
-                startQuiz();
-            }
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInteraction(); }
+                if (e.key === 'm' || e.key === 'M') { if (isShowingAnswer) toggleFailedList(); }
+            } else if (e.key === 'Enter') startQuiz('normal');
         });
     </script>
 </body>
