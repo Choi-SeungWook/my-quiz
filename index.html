@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>영어 문장 퀴즈 Pro (Cloud Sync)</title>
+    <title>영어 문장 퀴즈 Pro (Navigation)</title>
     <style>
-        /* 기본 배경 및 텍스트 색상 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             text-align: center; padding: 0; margin: 0; 
@@ -13,70 +12,41 @@
             height: 100vh; display: flex; flex-direction: column;
             user-select: none; -webkit-tap-highlight-color: transparent; overflow: hidden; 
         }
-        
         #timer-display {
             position: fixed; top: env(safe-area-inset-top, 20px); left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1); color: #ffffff; padding: 8px 18px;
             border-radius: 20px; font-weight: bold; font-size: 1rem; z-index: 1000;
             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
         }
-
         #setup, .quiz-container { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 90%; max-width: 500px; display: flex; flex-direction: column; align-items: center; 
         }
-
         .setup-card {
             background: #1e1e1e; width: 100%; padding: 30px 20px; border-radius: 20px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.5); box-sizing: border-box;
-            border: 1px solid #333;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.5); box-sizing: border-box; border: 1px solid #333;
         }
-        
-        .option-group { 
-            display: flex; justify-content: center; gap: 20px; 
-            margin: 20px 0; background: #252525; padding: 15px; border-radius: 12px;
-        }
+        .option-group { display: flex; justify-content: center; gap: 20px; margin: 20px 0; background: #252525; padding: 15px; border-radius: 12px; }
         .option-item { display: flex; align-items: center; cursor: pointer; font-size: 1.1rem; font-weight: 500; color: #ccc; }
-        .option-item input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; filter: invert(1); }
-        
-        input[type="text"] { 
-            padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #444; 
-            background-color: #2c2c2c; color: #fff;
-            border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center;
-        }
-
+        .option-item input { width: 18px; height: 18px; margin-right: 8px; filter: invert(1); }
+        input[type="text"] { padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #444; background-color: #2c2c2c; color: #fff; border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center; }
         .info-progress { font-size: 0.9rem; color: #999; margin-bottom: 15px; }
-        
-        .card { 
-            background: #1e1e1e; width: 100%; padding: 50px 25px; border-radius: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); position: relative; box-sizing: border-box;
-            cursor: pointer; border: 1px solid #333;
-        }
-
+        .card { background: #1e1e1e; width: 100%; padding: 50px 25px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); position: relative; box-sizing: border-box; cursor: pointer; border: 1px solid #333; min-height: 250px; display: flex; flex-direction: column; justify-content: center; }
         .kor-text { font-size: 1.5rem; font-weight: bold; color: #ffffff; margin-bottom: 25px; line-height: 1.4; word-break: keep-all; }
         .eng-text { font-size: 1.4rem; color: #4ade80; font-weight: 600; min-height: 1.5em; }
         .hint-msg { color: #666; font-size: 0.85rem; margin-top: 30px; }
-
-        .controls { width: 100%; margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
+        .controls { width: 100%; margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .nav-btns { display: flex; gap: 10px; width: 100%; }
         .btn { border: none; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1.1rem; }
-        
         .start-btn { padding: 16px; background: #0062cc; color: white; width: 100%; margin-top: 10px; }
         .review-start-btn { padding: 16px; background: #8e44ad; color: white; width: 100%; margin-top: 10px; }
         .review-start-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
-        
         .sync-btn-group { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
         .sync-btn { flex: 1; padding: 10px; background: #2c3e50; color: #bdc3c7; font-size: 0.8rem; border-radius: 10px; }
-
-        .dont-know-btn { 
-            padding: 12px; background: transparent; color: #ff6b6b; border: 2px solid #ff6b6b; 
-            font-size: 0.9rem; width: fit-content; margin: 0 auto;
-        }
+        .nav-btn { flex: 1; padding: 12px; background: #333; color: white; font-size: 0.9rem; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .dont-know-btn { padding: 12px; background: transparent; color: #ff6b6b; border: 2px solid #ff6b6b; font-size: 0.9rem; width: 100%; }
         .dont-know-btn.active { background: #ff6b6b; color: #fff; }
-
-        .repeat-badge {
-            background: #f1c40f; color: #000; padding: 4px 12px; border-radius: 10px;
-            font-size: 0.8rem; margin-bottom: 15px; font-weight: bold;
-        }
         h2 { color: #fff; margin-bottom: 10px; }
     </style>
 </head>
@@ -88,17 +58,13 @@
         <div class="setup-card">
             <h2>🎯 영어 퀴즈 설정</h2>
             <p id="total-info" style="color:#ff6b6b; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px;">데이터 로드 대기 중...</p>
-            
             <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)">
-            
             <div class="option-group">
                 <label class="option-item"><input type="radio" name="order" value="seq" checked> 순서대로</label>
                 <label class="option-item"><input type="radio" name="order" value="rand"> 랜덤하게</label>
             </div>
-
             <button class="btn start-btn" onclick="startQuiz('normal')">학습 시작하기</button>
             <button id="review-btn" class="btn review-start-btn" onclick="startQuiz('review')">❌ 모르는 문장 복습 (0)</button>
-
             <div class="sync-btn-group">
                 <button class="btn sync-btn" onclick="syncToGithub()">📤 서버로 내보내기</button>
                 <button class="btn sync-btn" onclick="fetchFromGithub()">📥 서버에서 가져오기</button>
@@ -107,69 +73,51 @@
     </div>
 
     <div id="quiz" class="quiz-container" style="display:none;">
-        <div id="repeat-info" class="repeat-badge" style="display:none;">오답 복습 중</div>
         <div class="info-progress" id="progress"></div>
-        
-        <div class="card" id="quiz-card" onclick="handleInteraction()">
+        <div class="card" id="quiz-card" onclick="toggleAnswer()">
             <div class="kor-text" id="kor-text"></div>
             <div class="eng-text" id="eng-text" style="visibility: hidden;"></div>
             <div class="hint-msg" id="hint-msg">터치/엔터: 정답 보기</div>
         </div>
-
         <div class="controls">
-            <button id="fail-btn" class="btn dont-know-btn" style="visibility: hidden;" onclick="toggleFailedList(event)">
-                이 문장 잘 몰라요 (체크)
-            </button>
+            <button id="fail-btn" class="btn dont-know-btn" onclick="toggleFailedList(event)">이 문장 잘 몰라요 (체크)</button>
+            <div class="nav-btns">
+                <button id="prev-btn" class="btn nav-btn" onclick="moveQuestion(-1)">◀ 이전</button>
+                <button id="next-btn" class="btn nav-btn" onclick="moveQuestion(1)">다음 ▶</button>
+            </div>
         </div>
     </div>
 
     <script>
-        /* --- [설정 섹션: 본인의 정보로 수정하세요] --- */
-        const OWNER = 'Choi-SeungWook'; 
-        const REPO = 'my-quiz';      
-        const FILE_PATH = 'failed_list.json'; 
+        /* --- [설정: 본인 정보로 수정] --- */
+        const OWNER = '내_아이디'; 
+        const REPO = '저장소_이름';      
         const DATA_FILE = 'English_Sentences.txt';
         const STORAGE_KEY = 'failed_sentences';
+        const FILE_PATH = 'failed_list.json';
 
-        let allData = [];
-        let quizList = [];
-        let reviewList = [];
-        let currentIndex = 0;
-        let isShowingAnswer = false;
-        let startTime, timerInterval, roundCount = 1;
+        let allData = [], quizList = [], currentIndex = 0;
+        let isShowingAnswer = false, startTime, timerInterval;
 
-        /* --- [데이터 로드] --- */
-        fetch(DATA_FILE)
-            .then(res => {
-                if (!res.ok) throw new Error("파일 로드 실패");
-                return res.text();
-            })
-            .then(text => {
-                const lines = text.split(/\r?\n/);
-                lines.forEach(line => {
-                    let cleanLine = line.trim();
-                    if (!cleanLine) return;
-                    if (cleanLine.includes(']')) cleanLine = cleanLine.split(']').pop().trim();
-                    const parts = cleanLine.split(',');
-                    if (parts.length >= 3) {
-                        const num = parseInt(parts[0].trim());
-                        if (!isNaN(num)) allData.push({ num, kor: parts[1].trim(), eng: parts[2].trim() });
-                    }
-                });
-                if (allData.length > 0) {
-                    document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장 로드 완료`;
-                    document.getElementById('total-info').style.color = "#4ade80";
-                    updateReviewButtonCount();
+        fetch(DATA_FILE).then(res => res.text()).then(text => {
+            text.split(/\r?\n/).forEach(line => {
+                let clean = line.trim();
+                if (!clean) return;
+                if (clean.includes(']')) clean = clean.split(']').pop().trim();
+                const parts = clean.split(',');
+                if (parts.length >= 3) {
+                    const num = parseInt(parts[0].trim());
+                    if (!isNaN(num)) allData.push({ num, kor: parts[1].trim(), eng: parts[2].trim() });
                 }
-            })
-            .catch(err => document.getElementById('total-info').innerText = `❌ 에러: ${err.message}`);
+            });
+            if (allData.length > 0) {
+                document.getElementById('total-info').innerText = `✅ 총 ${allData.length}문장 로드 완료`;
+                document.getElementById('total-info').style.color = "#4ade80";
+                updateReviewButtonCount();
+            }
+        });
 
-        /* --- [로컬스토리지 관리] --- */
-        function getFailedIDs() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
-        }
-
+        function getFailedIDs() { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
         function updateReviewButtonCount() {
             const count = getFailedIDs().length;
             const btn = document.getElementById('review-btn');
@@ -180,167 +128,132 @@
         function toggleFailedList(event) {
             if (event) event.stopPropagation();
             const q = quizList[currentIndex];
-            let failedIDs = getFailedIDs();
-            const fBtn = document.getElementById('fail-btn');
+            let ids = getFailedIDs();
+            if (!ids.includes(q.num)) ids.push(q.num);
+            else ids = ids.filter(id => id !== q.num);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+            updateReviewButtonCount();
+            renderQuestionState();
+        }
 
-            if (!failedIDs.includes(q.num)) {
-                failedIDs.push(q.num);
+        function toggleAnswer() {
+            isShowingAnswer = !isShowingAnswer;
+            document.getElementById('eng-text').style.visibility = isShowingAnswer ? 'visible' : 'hidden';
+            document.getElementById('hint-msg').innerText = isShowingAnswer ? '터치: 정답 가리기' : '터치/엔터: 정답 보기';
+        }
+
+        function moveQuestion(step) {
+            const nextIdx = currentIndex + step;
+            if (nextIdx < 0) return;
+            if (nextIdx >= quizList.length) {
+                finishQuiz();
+                return;
+            }
+            currentIndex = nextIdx;
+            isShowingAnswer = false;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = quizList[currentIndex];
+            document.getElementById('progress').innerText = `${currentIndex + 1} / ${quizList.length}`;
+            document.getElementById('kor-text').innerText = q.kor;
+            document.getElementById('eng-text').innerText = q.eng;
+            document.getElementById('eng-text').style.visibility = 'hidden';
+            document.getElementById('hint-msg').innerText = '터치/엔터: 정답 보기';
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').innerText = (currentIndex === quizList.length - 1) ? "학습 완료 🏁" : "다음 ▶";
+            renderQuestionState();
+        }
+
+        function renderQuestionState() {
+            const fBtn = document.getElementById('fail-btn');
+            if (getFailedIDs().includes(quizList[currentIndex].num)) {
                 fBtn.classList.add('active');
                 fBtn.innerText = "✓ 체크됨 (영구 저장)";
             } else {
-                failedIDs = failedIDs.filter(id => id !== q.num);
                 fBtn.classList.remove('active');
                 fBtn.innerText = "이 문장 잘 몰라요 (체크)";
             }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(failedIDs));
-            updateReviewButtonCount();
         }
 
-        /* --- [GitHub 클라우드 동기화] --- */
-        async function syncToGithub() {
-            const ids = getFailedIDs();
-            const token = prompt("GitHub Token을 입력하세요:");
-            if (!token) return;
-
-            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
-            let sha = null;
-
-            try {
-                const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
-                if (res.ok) {
-                    const data = await res.json();
-                    sha = data.sha;
-                }
-
-                const putRes = await fetch(url, {
-                    method: "PUT",
-                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        message: "Cloud Sync: Update failed list",
-                        content: btoa(JSON.stringify(ids)),
-                        sha: sha
-                    })
-                });
-
-                if (putRes.ok) alert("✅ 서버로 내보내기 완료!");
-                else alert("❌ 실패: 권한이나 설정을 확인하세요.");
-            } catch (e) { alert("오류 발생: " + e.message); }
-        }
-
-        async function fetchFromGithub() {
-            const token = prompt("GitHub Token을 입력하세요:");
-            if (!token) return;
-
-            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
-            try {
-                const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
-                if (res.ok) {
-                    const data = await res.json();
-                    const ids = JSON.parse(atob(data.content));
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-                    updateReviewButtonCount();
-                    alert(`✅ 서버에서 ${ids.length}개를 가져왔습니다!`);
-                } else alert("❌ 서버에 저장된 파일이 없습니다.");
-            } catch (e) { alert("오류 발생: " + e.message); }
-        }
-
-        /* --- [퀴즈 로직] --- */
         function startQuiz(mode) {
             const order = document.querySelector('input[name="order"]:checked').value;
             if (mode === 'normal') {
-                const input = document.getElementById('page-input').value;
-                if (!input.trim()) return alert("장 번호를 입력하세요.");
+                const val = document.getElementById('page-input').value.trim();
+                if (!val) return alert("장 번호를 입력하세요.");
                 const pages = new Set();
-                input.split(',').forEach(p => {
+                val.split(',').forEach(p => {
                     if (p.includes('-')) {
                         const [s, e] = p.split('-').map(Number);
                         for (let i = Math.min(s,e); i <= Math.max(s,e); i++) pages.add(i);
-                    } else if (p.trim()) pages.add(parseInt(p.trim()));
+                    } else pages.add(parseInt(p));
                 });
                 quizList = allData.filter(d => pages.has(Math.ceil(d.num / 30)));
             } else {
                 const ids = getFailedIDs();
                 quizList = allData.filter(d => ids.includes(d.num));
             }
-
             if (quizList.length === 0) return alert("해당하는 문장이 없습니다.");
-            if (order === 'rand') quizList.sort(() => Math.random() - 0.5);
-            else quizList.sort((a,b) => a.num - b.num);
-
+            quizList.sort((a,b) => order === 'rand' ? Math.random() - 0.5 : a.num - b.num);
+            currentIndex = 0;
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
-            startTime = Date.now();
             document.getElementById('timer-display').style.display = 'block';
-            timerInterval = setInterval(updateTimer, 1000);
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                document.getElementById('timer-display').innerText = `${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
+            }, 1000);
             showQuestion();
         }
 
-        function updateTimer() {
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
-            const s = String(elapsed % 60).padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            alert(`🎉 학습 완료! 소요 시간: ${document.getElementById('timer-display').innerText}`);
+            location.reload();
         }
 
-        function showQuestion() {
-            const q = quizList[currentIndex];
-            isShowingAnswer = false;
-            document.getElementById('progress').innerText = `Round ${roundCount} | ${currentIndex + 1} / ${quizList.length}`;
-            document.getElementById('repeat-info').style.display = roundCount > 1 ? 'inline-block' : 'none';
-            document.getElementById('kor-text').innerText = q.kor;
-            document.getElementById('eng-text').innerText = q.eng;
-            document.getElementById('eng-text').style.visibility = 'hidden';
-            document.getElementById('hint-msg').innerText = '터치/엔터: 정답 보기';
-            
-            const fBtn = document.getElementById('fail-btn');
-            fBtn.style.visibility = 'hidden';
-            if (getFailedIDs().includes(q.num)) {
-                fBtn.classList.add('active');
-                fBtn.innerText = "✓ 체크됨 (영구 저장)";
-            } else {
-                fBtn.classList.remove('active');
-                fBtn.innerText = "이 문장 잘 몰라요 (체크)";
-            }
+        /* --- [GitHub Sync] --- */
+        async function syncToGithub() {
+            const ids = getFailedIDs();
+            const token = prompt("GitHub Token:");
+            if (!token) return;
+            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+            try {
+                const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
+                const sha = res.ok ? (await res.json()).sha : null;
+                const putRes = await fetch(url, {
+                    method: "PUT",
+                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: "Sync", content: btoa(unescape(encodeURIComponent(JSON.stringify(ids)))), sha })
+                });
+                if (putRes.ok) alert("✅ 서버 저장 완료");
+            } catch (e) { alert("오류: " + e.message); }
         }
 
-        function handleInteraction() {
-            if (!isShowingAnswer) {
-                document.getElementById('eng-text').style.visibility = 'visible';
-                document.getElementById('hint-msg').innerText = '터치/엔터: 다음 문제';
-                document.getElementById('fail-btn').style.visibility = 'visible';
-                isShowingAnswer = true;
-            } else {
-                if (document.getElementById('fail-btn').classList.contains('active')) {
-                    reviewList.push(quizList[currentIndex]);
+        async function fetchFromGithub() {
+            const token = prompt("GitHub Token:");
+            if (!token) return;
+            try {
+                const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, { headers: { "Authorization": `token ${token}` } });
+                if (res.ok) {
+                    const ids = JSON.parse(decodeURIComponent(escape(atob((await res.json()).content))));
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+                    updateReviewButtonCount();
+                    alert("✅ 데이터를 가져왔습니다");
                 }
-                currentIndex++;
-                if (currentIndex < quizList.length) showQuestion();
-                else nextRound();
-            }
-        }
-
-        function nextRound() {
-            if (reviewList.length > 0) {
-                alert(`라운드 종료! 체크한 ${reviewList.length}문장을 다시 반복합니다.`);
-                quizList = [...reviewList];
-                reviewList = [];
-                currentIndex = 0;
-                roundCount++;
-                showQuestion();
-            } else {
-                clearInterval(timerInterval);
-                alert(`🎉 학습 완료! 소요 시간: ${document.getElementById('timer-display').innerText}`);
-                location.reload();
-            }
+            } catch (e) { alert("오류: " + e.message); }
         }
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('quiz').style.display === 'flex') {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInteraction(); }
-                if (e.key === 'm' || e.key === 'M') { if (isShowingAnswer) toggleFailedList(); }
-            } else if (e.key === 'Enter') startQuiz('normal');
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAnswer(); }
+                else if (e.key === 'ArrowLeft') moveQuestion(-1);
+                else if (e.key === 'ArrowRight') moveQuestion(1);
+                else if (e.key.toLowerCase() === 'm') toggleFailedList();
+            }
         });
     </script>
 </body>
 </html>
-
