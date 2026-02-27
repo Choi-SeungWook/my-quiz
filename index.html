@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>영어 문장 퀴즈 Pro +</title>
+    <title>영어 문장 퀴즈 Pro+</title>
     <style>
-        /* 기존 스타일 유지 및 일부 추가 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             text-align: center; padding: 0; margin: 0; 
@@ -28,8 +27,9 @@
             box-shadow: 0 4px 25px rgba(0,0,0,0.5); box-sizing: border-box; border: 1px solid #333;
         }
         .option-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 15px 0; background: #252525; padding: 15px; border-radius: 12px; }
-        .option-item { display: flex; align-items: center; cursor: pointer; font-size: 1rem; font-weight: 500; color: #ccc; }
-        .option-item input { width: 18px; height: 18px; margin-right: 8px; filter: invert(1); }
+        .option-item { display: flex; align-items: center; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #ccc; }
+        .option-item input { width: 16px; height: 16px; margin-right: 6px; filter: invert(1); }
+        .option-title { width: 100%; font-size: 0.85rem; color: #888; margin-bottom: 8px; font-weight: bold; }
         input[type="text"] { padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #444; background-color: #2c2c2c; color: #fff; border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center; }
         .info-progress { font-size: 0.9rem; color: #999; margin-bottom: 15px; }
         .card { background: #1e1e1e; width: 100%; padding: 50px 25px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); position: relative; box-sizing: border-box; cursor: pointer; border: 1px solid #333; min-height: 250px; display: flex; flex-direction: column; justify-content: center; }
@@ -47,7 +47,6 @@
         .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .dont-know-btn { padding: 12px; background: transparent; color: #ff6b6b; border: 2px solid #ff6b6b; font-size: 0.9rem; width: 100%; }
         .dont-know-btn.active { background: #ff6b6b; color: #fff; }
-        h2 { color: #fff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -58,20 +57,32 @@
         <div class="setup-card">
             <h2>🎯 영어 퀴즈 설정</h2>
             <p id="total-info" style="color:#ff6b6b; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px;">데이터 로드 대기 중...</p>
+            
             <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)" onkeydown="if(event.key==='Enter') startQuiz('normal')">
             
             <div class="option-group">
+                <div class="option-title">재생 순서</div>
                 <label class="option-item"><input type="radio" name="order" value="seq" checked> 순차</label>
                 <label class="option-item"><input type="radio" name="order" value="rand"> 랜덤</label>
             </div>
 
             <div class="option-group">
-                <label class="option-item"><input type="checkbox" id="auto-mode"> ⚡ 깜빡이 모드 (2초)</label>
+                <div class="option-title">모드 설정</div>
+                <label class="option-item"><input type="checkbox" id="auto-mode"> ⚡ 깜빡이</label>
                 <label class="option-item"><input type="checkbox" id="tts-mode"> 🔊 음성 지원</label>
+            </div>
+
+            <div class="option-group" id="speed-options">
+                <div class="option-title">깜빡이 간격 (초)</div>
+                <label class="option-item"><input type="radio" name="speed" value="2000" checked> 2초</label>
+                <label class="option-item"><input type="radio" name="speed" value="3000"> 3초</label>
+                <label class="option-item"><input type="radio" name="speed" value="4000"> 4초</label>
+                <label class="option-item"><input type="radio" name="speed" value="5000"> 5초</label>
             </div>
 
             <button class="btn start-btn" onclick="startQuiz('normal')">학습 시작하기</button>
             <button id="review-btn" class="btn review-start-btn" onclick="startQuiz('review')">❌ 모르는 문장 복습 (0)</button>
+            
             <div style="display:flex; gap:10px; margin-top:15px; width:100%;">
                 <button class="sync-btn" onclick="syncToGithub()">📤 내보내기</button>
                 <button class="sync-btn" onclick="fetchFromGithub()">📥 가져오기</button>
@@ -105,8 +116,7 @@
         let allData = [], quizList = [], currentIndex = 0;
         let isShowingAnswer = false, startTime, timerInterval, autoTimer;
         
-        // 설정 값
-        let config = { auto: false, tts: false };
+        let config = { auto: false, tts: false, interval: 2000 };
 
         fetch(DATA_FILE).then(res => res.text()).then(text => {
             text.split(/\r?\n/).forEach(line => {
@@ -134,24 +144,19 @@
             btn.disabled = count === 0;
         }
 
-        // 음성 출력 함수
         function speak(text, lang) {
             if (!config.tts) return;
-            window.speechSynthesis.cancel(); // 이전 음성 중단
+            window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = lang; // 'en-US' 또는 'ko-KR'
+            msg.lang = lang;
             msg.rate = 1.0;
             window.speechSynthesis.speak(msg);
         }
 
         function handleMainAction() {
-            if (config.auto) return; // 자동모드일 땐 클릭 무시 (원하면 중단 로직 추가 가능)
-            
-            if (!isShowingAnswer) {
-                showAnswer();
-            } else {
-                moveQuestion(1);
-            }
+            if (config.auto) return; 
+            if (!isShowingAnswer) showAnswer();
+            else moveQuestion(1);
         }
 
         function showAnswer() {
@@ -163,7 +168,7 @@
             if (config.tts) speak(q.eng, 'en-US');
 
             if (config.auto) {
-                autoTimer = setTimeout(() => moveQuestion(1), 2000);
+                autoTimer = setTimeout(() => moveQuestion(1), config.interval);
             }
         }
 
@@ -191,13 +196,10 @@
             document.getElementById('next-btn').innerText = (currentIndex === quizList.length - 1) ? "학습 완료 🏁" : "다음 ▶";
             
             renderQuestionState();
-
-            // TTS가 켜져있으면 한글 먼저 읽기
             if (config.tts) speak(q.kor, 'ko-KR');
 
-            // 자동 모드면 2초 후 정답 공개
             if (config.auto) {
-                autoTimer = setTimeout(() => showAnswer(), 2000);
+                autoTimer = setTimeout(() => showAnswer(), config.interval);
             }
         }
 
@@ -205,6 +207,7 @@
             const order = document.querySelector('input[name="order"]:checked').value;
             config.auto = document.getElementById('auto-mode').checked;
             config.tts = document.getElementById('tts-mode').checked;
+            config.interval = parseInt(document.querySelector('input[name="speed"]:checked').value);
 
             if (mode === 'normal') {
                 const val = document.getElementById('page-input').value.trim();
@@ -272,7 +275,6 @@
             }
         }
 
-        /* --- GitHub Sync functions (기존과 동일) --- */
         async function syncToGithub() {
             const ids = getFailedIDs();
             const token = prompt("GitHub Token:");
