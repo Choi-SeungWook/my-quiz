@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>영어 문장 퀴즈 Pro</title>
+    <title>영어 문장 퀴즈 Pro +</title>
     <style>
+        /* 기존 스타일 유지 및 일부 추가 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             text-align: center; padding: 0; margin: 0; 
@@ -26,8 +27,8 @@
             background: #1e1e1e; width: 100%; padding: 30px 20px; border-radius: 20px;
             box-shadow: 0 4px 25px rgba(0,0,0,0.5); box-sizing: border-box; border: 1px solid #333;
         }
-        .option-group { display: flex; justify-content: center; gap: 20px; margin: 20px 0; background: #252525; padding: 15px; border-radius: 12px; }
-        .option-item { display: flex; align-items: center; cursor: pointer; font-size: 1.1rem; font-weight: 500; color: #ccc; }
+        .option-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 15px 0; background: #252525; padding: 15px; border-radius: 12px; }
+        .option-item { display: flex; align-items: center; cursor: pointer; font-size: 1rem; font-weight: 500; color: #ccc; }
         .option-item input { width: 18px; height: 18px; margin-right: 8px; filter: invert(1); }
         input[type="text"] { padding: 15px; width: 80%; font-size: 1.1rem; border: 2px solid #444; background-color: #2c2c2c; color: #fff; border-radius: 12px; margin-bottom: 10px; outline: none; text-align: center; }
         .info-progress { font-size: 0.9rem; color: #999; margin-bottom: 15px; }
@@ -41,8 +42,7 @@
         .start-btn { padding: 16px; background: #0062cc; color: white; width: 100%; margin-top: 10px; }
         .review-start-btn { padding: 16px; background: #8e44ad; color: white; width: 100%; margin-top: 10px; }
         .review-start-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
-        .sync-btn-group { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
-        .sync-btn { flex: 1; padding: 10px; background: #2c3e50; color: #bdc3c7; font-size: 0.8rem; border-radius: 10px; }
+        .sync-btn { flex: 1; padding: 10px; background: #2c3e50; color: #bdc3c7; font-size: 0.8rem; border-radius: 10px; border:none; }
         .nav-btn { flex: 1; padding: 12px; background: #333; color: white; font-size: 0.9rem; }
         .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .dont-know-btn { padding: 12px; background: transparent; color: #ff6b6b; border: 2px solid #ff6b6b; font-size: 0.9rem; width: 100%; }
@@ -59,15 +59,22 @@
             <h2>🎯 영어 퀴즈 설정</h2>
             <p id="total-info" style="color:#ff6b6b; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px;">데이터 로드 대기 중...</p>
             <input type="text" id="page-input" placeholder="장 번호 (예: 1, 3-5)" onkeydown="if(event.key==='Enter') startQuiz('normal')">
+            
             <div class="option-group">
-                <label class="option-item"><input type="radio" name="order" value="seq" checked> 순서대로</label>
-                <label class="option-item"><input type="radio" name="order" value="rand"> 랜덤하게</label>
+                <label class="option-item"><input type="radio" name="order" value="seq" checked> 순차</label>
+                <label class="option-item"><input type="radio" name="order" value="rand"> 랜덤</label>
             </div>
+
+            <div class="option-group">
+                <label class="option-item"><input type="checkbox" id="auto-mode"> ⚡ 깜빡이 모드 (2초)</label>
+                <label class="option-item"><input type="checkbox" id="tts-mode"> 🔊 음성 지원</label>
+            </div>
+
             <button class="btn start-btn" onclick="startQuiz('normal')">학습 시작하기</button>
             <button id="review-btn" class="btn review-start-btn" onclick="startQuiz('review')">❌ 모르는 문장 복습 (0)</button>
-            <div class="sync-btn-group">
-                <button class="btn sync-btn" onclick="syncToGithub()">📤 서버로 내보내기</button>
-                <button class="btn sync-btn" onclick="fetchFromGithub()">📥 서버에서 가져오기</button>
+            <div style="display:flex; gap:10px; margin-top:15px; width:100%;">
+                <button class="sync-btn" onclick="syncToGithub()">📤 내보내기</button>
+                <button class="sync-btn" onclick="fetchFromGithub()">📥 가져오기</button>
             </div>
         </div>
     </div>
@@ -89,7 +96,6 @@
     </div>
 
     <script>
-        /* --- [설정: 본인 정보로 수정] --- */
         const OWNER = 'Choi-SeungWook'; 
         const REPO = 'my-quiz';      
         const DATA_FILE = 'English_Sentences.txt';
@@ -97,7 +103,10 @@
         const FILE_PATH = 'failed_list.json';
 
         let allData = [], quizList = [], currentIndex = 0;
-        let isShowingAnswer = false, startTime, timerInterval;
+        let isShowingAnswer = false, startTime, timerInterval, autoTimer;
+        
+        // 설정 값
+        let config = { auto: false, tts: false };
 
         fetch(DATA_FILE).then(res => res.text()).then(text => {
             text.split(/\r?\n/).forEach(line => {
@@ -125,31 +134,41 @@
             btn.disabled = count === 0;
         }
 
-        function toggleFailedList(event) {
-            if (event) event.stopPropagation();
-            const q = quizList[currentIndex];
-            let ids = getFailedIDs();
-            if (!ids.includes(q.num)) ids.push(q.num);
-            else ids = ids.filter(id => id !== q.num);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-            updateReviewButtonCount();
-            renderQuestionState();
+        // 음성 출력 함수
+        function speak(text, lang) {
+            if (!config.tts) return;
+            window.speechSynthesis.cancel(); // 이전 음성 중단
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = lang; // 'en-US' 또는 'ko-KR'
+            msg.rate = 1.0;
+            window.speechSynthesis.speak(msg);
         }
 
-        // 엔터나 터치 시 실행되는 통합 액션
         function handleMainAction() {
+            if (config.auto) return; // 자동모드일 땐 클릭 무시 (원하면 중단 로직 추가 가능)
+            
             if (!isShowingAnswer) {
-                // 1. 답이 안 보일 때는 답을 보여줌
-                isShowingAnswer = true;
-                document.getElementById('eng-text').style.visibility = 'visible';
-                document.getElementById('hint-msg').innerText = '터치/엔터: 다음 문제';
+                showAnswer();
             } else {
-                // 2. 답이 보일 때는 다음 문제로 이동
                 moveQuestion(1);
             }
         }
 
+        function showAnswer() {
+            isShowingAnswer = true;
+            document.getElementById('eng-text').style.visibility = 'visible';
+            document.getElementById('hint-msg').innerText = config.auto ? '자동 재생 중...' : '터치/엔터: 다음 문제';
+            
+            const q = quizList[currentIndex];
+            if (config.tts) speak(q.eng, 'en-US');
+
+            if (config.auto) {
+                autoTimer = setTimeout(() => moveQuestion(1), 2000);
+            }
+        }
+
         function moveQuestion(step) {
+            clearTimeout(autoTimer);
             const nextIdx = currentIndex + step;
             if (nextIdx < 0) return;
             if (nextIdx >= quizList.length) {
@@ -167,25 +186,26 @@
             document.getElementById('kor-text').innerText = q.kor;
             document.getElementById('eng-text').innerText = q.eng;
             document.getElementById('eng-text').style.visibility = 'hidden';
-            document.getElementById('hint-msg').innerText = '터치/엔터: 정답 보기';
+            document.getElementById('hint-msg').innerText = config.auto ? '자동 재생 중...' : '터치/엔터: 정답 보기';
             document.getElementById('prev-btn').disabled = currentIndex === 0;
             document.getElementById('next-btn').innerText = (currentIndex === quizList.length - 1) ? "학습 완료 🏁" : "다음 ▶";
+            
             renderQuestionState();
-        }
 
-        function renderQuestionState() {
-            const fBtn = document.getElementById('fail-btn');
-            if (getFailedIDs().includes(quizList[currentIndex].num)) {
-                fBtn.classList.add('active');
-                fBtn.innerText = "✓ 체크됨 (영구 저장)";
-            } else {
-                fBtn.classList.remove('active');
-                fBtn.innerText = "이 문장 잘 몰라요 (체크)";
+            // TTS가 켜져있으면 한글 먼저 읽기
+            if (config.tts) speak(q.kor, 'ko-KR');
+
+            // 자동 모드면 2초 후 정답 공개
+            if (config.auto) {
+                autoTimer = setTimeout(() => showAnswer(), 2000);
             }
         }
 
         function startQuiz(mode) {
             const order = document.querySelector('input[name="order"]:checked').value;
+            config.auto = document.getElementById('auto-mode').checked;
+            config.tts = document.getElementById('tts-mode').checked;
+
             if (mode === 'normal') {
                 const val = document.getElementById('page-input').value.trim();
                 if (!val) return alert("장 번호를 입력하세요.");
@@ -201,27 +221,58 @@
                 const ids = getFailedIDs();
                 quizList = allData.filter(d => ids.includes(d.num));
             }
+
             if (quizList.length === 0) return alert("해당하는 문장이 없습니다.");
+            
             quizList.sort((a,b) => order === 'rand' ? Math.random() - 0.5 : a.num - b.num);
             currentIndex = 0;
+            isShowingAnswer = false;
+
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
             document.getElementById('timer-display').style.display = 'block';
+            
             startTime = Date.now();
-            timerInterval = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                document.getElementById('timer-display').innerText = `${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
-            }, 1000);
+            timerInterval = setInterval(updateTimer, 1000);
+            
             showQuestion();
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('timer-display').innerText = `${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
         }
 
         function finishQuiz() {
             clearInterval(timerInterval);
+            clearTimeout(autoTimer);
             alert(`🎉 학습 완료! 소요 시간: ${document.getElementById('timer-display').innerText}`);
             location.reload();
         }
 
-        /* --- [GitHub Sync] --- */
+        function toggleFailedList(event) {
+            if (event) event.stopPropagation();
+            const q = quizList[currentIndex];
+            let ids = getFailedIDs();
+            if (!ids.includes(q.num)) ids.push(q.num);
+            else ids = ids.filter(id => id !== q.num);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+            updateReviewButtonCount();
+            renderQuestionState();
+        }
+
+        function renderQuestionState() {
+            const fBtn = document.getElementById('fail-btn');
+            if (getFailedIDs().includes(quizList[currentIndex].num)) {
+                fBtn.classList.add('active');
+                fBtn.innerText = "✓ 체크됨 (영구 저장)";
+            } else {
+                fBtn.classList.remove('active');
+                fBtn.innerText = "이 문장 잘 몰라요 (체크)";
+            }
+        }
+
+        /* --- GitHub Sync functions (기존과 동일) --- */
         async function syncToGithub() {
             const ids = getFailedIDs();
             const token = prompt("GitHub Token:");
@@ -255,11 +306,7 @@
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('quiz').style.display === 'flex') {
-                // 엔터나 스페이스는 통합 액션 실행
-                if (e.key === 'Enter' || e.key === ' ') { 
-                    e.preventDefault(); 
-                    handleMainAction(); 
-                }
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMainAction(); }
                 else if (e.key === 'ArrowLeft') moveQuestion(-1);
                 else if (e.key === 'ArrowRight') moveQuestion(1);
                 else if (e.key.toLowerCase() === 'm') toggleFailedList();
