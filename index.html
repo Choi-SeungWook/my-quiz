@@ -12,12 +12,25 @@
             height: 100vh; display: flex; flex-direction: column;
             user-select: none; -webkit-tap-highlight-color: transparent; overflow: hidden; 
         }
+        /* 상단 바 설정 */
+        #top-bar {
+            position: fixed; top: env(safe-area-inset-top, 10px); 
+            left: 0; right: 0; height: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 15px; z-index: 1000;
+        }
         #timer-display {
-            position: fixed; top: env(safe-area-inset-top, 10px); left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1); color: #ffffff; padding: 5px 15px;
-            border-radius: 20px; font-weight: bold; font-size: 0.9rem; z-index: 1000;
+            border-radius: 20px; font-weight: bold; font-size: 0.9rem;
             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
         }
+        .home-icon-btn {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; border-radius: 50%; width: 35px; height: 35px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; backdrop-filter: blur(5px); font-size: 1.1rem;
+        }
+
         #setup, .quiz-container { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 92%; max-width: 450px; display: flex; flex-direction: column; align-items: center; 
@@ -50,7 +63,6 @@
         .review-start-btn { padding: 12px; background: #8e44ad; color: white; width: 100%; font-size: 1rem; margin-top: 2px; }
         .review-start-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
         
-        /* 일시정지 버튼 스타일 추가 */
         .pause-btn { padding: 12px; background: #f39c12; color: white; width: 100%; font-size: 1rem; }
         .pause-btn.resume { background: #27ae60; }
 
@@ -61,7 +73,10 @@
 </head>
 <body>
 
-    <div id="timer-display" style="display:none;">00:00</div>
+    <div id="top-bar" style="display:none;">
+        <div class="home-icon-btn" onclick="goHome()">🏠</div>
+        <div id="timer-display">00:00</div>
+        <div style="width:35px;"></div> </div>
 
     <div id="setup">
         <div class="setup-card">
@@ -109,7 +124,6 @@
         </div>
         <div class="controls">
             <button id="pause-btn" class="btn pause-btn" onclick="togglePause(event)" style="display:none;">⏸ 일시정지</button>
-            
             <button id="fail-btn" class="btn dont-know-btn" onclick="toggleFailedList(event)">이 문장 잘 몰라요 (체크)</button>
             <div class="nav-btns">
                 <button id="prev-btn" class="btn nav-btn" onclick="moveQuestion(-1)">◀ 이전</button>
@@ -128,7 +142,7 @@
         let allData = [], quizList = [], currentIndex = 0;
         let isShowingAnswer = false, startTime, timerInterval, autoTimer;
         let config = { auto: false, tts: false, interval: 2000 };
-        let isPaused = false; // 일시정지 상태 변수
+        let isPaused = false;
 
         fetch(DATA_FILE).then(res => res.text()).then(text => {
             text.split(/\r?\n/).forEach(line => {
@@ -183,14 +197,12 @@
 
         function moveQuestion(step) {
             clearTimeout(autoTimer);
-            // 수동 조작 시 일시정지 해제 (선택 사항)
             if (isPaused) {
                 isPaused = false;
                 const pBtn = document.getElementById('pause-btn');
                 pBtn.innerText = "⏸ 일시정지";
                 pBtn.classList.remove('resume');
             }
-
             const nextIdx = currentIndex + step;
             if (nextIdx < 0) return;
             if (nextIdx >= quizList.length) { finishQuiz(); return; }
@@ -217,7 +229,6 @@
             if (event) event.stopPropagation();
             isPaused = !isPaused;
             const pBtn = document.getElementById('pause-btn');
-            
             if (isPaused) {
                 clearTimeout(autoTimer);
                 pBtn.innerText = "▶ 다시 시작";
@@ -226,14 +237,19 @@
             } else {
                 pBtn.innerText = "⏸ 일시정지";
                 pBtn.classList.remove('resume');
-                // 현재 정답이 보이는 상태였는지에 따라 타이머 재개
-                if (!isShowingAnswer) {
-                    showQuestion(); // 현재 질문 단계부터 다시 타이머 시작
-                } else {
-                    autoTimer = setTimeout(() => moveQuestion(1), config.interval);
-                    document.getElementById('hint-msg').innerText = "자동 재생 중...";
-                }
+                if (!isShowingAnswer) showQuestion();
+                else autoTimer = setTimeout(() => moveQuestion(1), config.interval);
             }
+        }
+
+        function goHome() {
+            if (!confirm("학습을 중단하고 메인 화면으로 돌아갈까요?")) return;
+            clearInterval(timerInterval);
+            clearTimeout(autoTimer);
+            window.speechSynthesis.cancel();
+            document.getElementById('setup').style.display = 'flex';
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('top-bar').style.display = 'none';
         }
 
         function startQuiz(mode) {
@@ -264,20 +280,12 @@
             currentIndex = 0;
             isShowingAnswer = false;
 
-            // UI 전환
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz').style.display = 'flex';
-            document.getElementById('timer-display').style.display = 'block';
+            document.getElementById('top-bar').style.display = 'flex';
             
-            // 깜빡이 모드일 때만 일시정지 버튼 노출
             const pBtn = document.getElementById('pause-btn');
-            if (config.auto) {
-                pBtn.style.display = 'block';
-                pBtn.innerText = "⏸ 일시정지";
-                pBtn.classList.remove('resume');
-            } else {
-                pBtn.style.display = 'none';
-            }
+            pBtn.style.display = config.auto ? 'block' : 'none';
 
             startTime = Date.now();
             timerInterval = setInterval(() => {
@@ -353,6 +361,7 @@
                 }
                 else if (e.key === 'ArrowLeft') moveQuestion(-1);
                 else if (e.key === 'ArrowRight') moveQuestion(1);
+                else if (e.key === 'Escape') goHome();
             }
         });
     </script>
