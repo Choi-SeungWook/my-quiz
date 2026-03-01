@@ -12,24 +12,27 @@
             height: 100vh; display: flex; flex-direction: column;
             user-select: none; -webkit-tap-highlight-color: transparent; overflow: hidden; 
         }
-        /* 상단 바 설정 */
+        /* 상단 바 설정: 타이머 왼쪽, 홈버튼 오른쪽 정렬 */
         #top-bar {
             position: fixed; top: env(safe-area-inset-top, 10px); 
-            left: 0; right: 0; height: 40px;
+            left: 0; right: 0; height: 50px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 15px; z-index: 1000;
+            padding: 0 20px; z-index: 1000;
         }
         #timer-display {
-            background: rgba(255, 255, 255, 0.1); color: #ffffff; padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1); color: #ffffff; padding: 6px 16px;
             border-radius: 20px; font-weight: bold; font-size: 0.9rem;
             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
+            min-width: 60px;
         }
         .home-icon-btn {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: white; border-radius: 50%; width: 35px; height: 35px;
+            color: white; border-radius: 12px; width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; backdrop-filter: blur(5px); font-size: 1.1rem;
+            cursor: pointer; backdrop-filter: blur(5px); font-size: 1.2rem;
+            transition: background 0.2s;
         }
+        .home-icon-btn:active { background: rgba(255, 255, 255, 0.3); }
 
         #setup, .quiz-container { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -74,9 +77,9 @@
 <body>
 
     <div id="top-bar" style="display:none;">
-        <div class="home-icon-btn" onclick="goHome()">🏠</div>
         <div id="timer-display">00:00</div>
-        <div style="width:35px;"></div> </div>
+        <div class="home-icon-btn" onclick="goHome()" title="메인으로">🏠</div>
+    </div>
 
     <div id="setup">
         <div class="setup-card">
